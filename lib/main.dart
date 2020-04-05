@@ -54,10 +54,10 @@ class Messio extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Palette.primaryColor,
+        fontFamily: 'Manrope',
       ),
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
-          return ContactListPage();
           if (state is UnAuthenticated) {
             return RegisterPage();
           } else if (state is ProfileUpdated) {
