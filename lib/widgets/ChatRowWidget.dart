@@ -1,0 +1,60 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:messio/config/Assets.dart';
+import 'package:messio/config/Styles.dart';
+
+class ChatRowWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(15.0, 5.0, 0.0, 5.0),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            flex: 8,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                CircleAvatar(
+                  radius: 30.0,
+                  backgroundImage: Image.asset(Assets.user).image,
+                ),
+                SizedBox(
+                  width: 15.0,
+                ),
+                Container(
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        'Pauline Nyawira',
+                        style: Styles.subHeading,
+                      ),
+                      Text(
+                        'What\'s up?',
+                        style: Styles.subText,
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  DateFormat('kk:mm').format(
+                      DateTime.fromMillisecondsSinceEpoch(1565888474278)),
+                  style: Styles.date,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

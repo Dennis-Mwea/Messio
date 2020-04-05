@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:messio/config/Assets.dart';
 import 'package:messio/config/Palette.dart';
+import 'package:messio/config/Styles.dart';
 
 class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double height = 100;
@@ -9,21 +10,14 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    var textHeading = TextStyle(
-        color: Palette.primaryTextColor,
-        fontSize: 20); // Text style for the name
-    var textStyle = TextStyle(
-        color: Palette.secondaryTextColor); // Text style for everything else
-    double width =
-        MediaQuery.of(context).size.width; // calculate the screen width
-
     return Material(
       child: Container(
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Colors.black,
-              blurRadius: 5.0,
+              color: Colors.grey,
+              blurRadius: 2.0,
+              spreadRadius: 0.1,
             ),
           ],
         ),
@@ -66,11 +60,11 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
                                     children: <Widget>[
                                       Text(
                                         'Dennis Mwea',
-                                        style: textHeading,
+                                        style: Styles.textHeading,
                                       ),
                                       Text(
                                         '@dennismwea',
-                                        style: textStyle,
+                                        style: Styles.text,
                                       ),
                                     ],
                                   ),
@@ -90,7 +84,7 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
                             children: <Widget>[
                               Text(
                                 'Photos',
-                                style: textStyle,
+                                style: Styles.text,
                               ),
                               VerticalDivider(
                                 width: 30.0,
@@ -98,7 +92,7 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
                               ),
                               Text(
                                 'Videos',
-                                style: textStyle,
+                                style: Styles.text,
                               ),
                               VerticalDivider(
                                 width: 30.0,
@@ -106,7 +100,7 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
                               ),
                               Text(
                                 'Files',
-                                style: textStyle,
+                                style: Styles.text,
                               ),
                             ],
                           ),
@@ -121,7 +115,6 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: Container(
                   child: Center(
                     child: CircleAvatar(
-                      radius: (80 - (width * .06)) / 2,
                       backgroundImage: Image.asset(Assets.user).image,
                     ),
                   ),
