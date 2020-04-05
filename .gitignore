@@ -30,6 +30,11 @@
 .pub/
 /build/
 
+#Platform specific
+/android/
+/android/app/google-services.json
+/ios/
+
 # Web related
 lib/generated_plugin_registrant.dart
 
