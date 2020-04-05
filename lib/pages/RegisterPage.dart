@@ -32,36 +32,7 @@ class _RegisterPageState extends State<RegisterPage>
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-    usernameFieldAnimationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-    profilePicHeightAnimation =
-        Tween(begin: 100.0, end: 0.0).animate(usernameFieldAnimationController)
-          ..addListener(() {
-            setState(() {});
-          });
-    usernameAnimation =
-        Tween(begin: 50.0, end: 10.0).animate(usernameFieldAnimationController)
-          ..addListener(() {
-            setState(() {});
-          });
-    ageAnimation =
-        Tween(begin: 80.0, end: 10.0).animate(usernameFieldAnimationController)
-          ..addListener(() {
-            setState(() {});
-          });
-    usernameFocusNode.addListener(() {
-      if (usernameFocusNode.hasFocus) {
-        usernameFieldAnimationController.forward();
-      } else {
-        usernameFieldAnimationController.reverse();
-      }
-    });
-    pageController.addListener(() {
-      setState(() {
-        begin = Alignment(pageController.page, pageController.page);
-        end = Alignment(1 - pageController.page, 1 - pageController.page);
-      });
-    });
+    initApp();
     super.initState();
   }
 
@@ -86,17 +57,14 @@ class _RegisterPageState extends State<RegisterPage>
             child: Stack(
               alignment: AlignmentDirectional.bottomCenter,
               children: <Widget>[
-                AnimatedContainer(
-                  duration: Duration(milliseconds: 1500),
-                  child: PageView(
-                    controller: pageController,
-                    physics: NeverScrollableScrollPhysics(),
-                    onPageChanged: (int page) => updatePageState(page),
-                    children: <Widget>[
-                      buildPageOne(),
-                      buildPageTwo(),
-                    ],
-                  ),
+                PageView(
+                  controller: pageController,
+                  physics: NeverScrollableScrollPhysics(),
+                  onPageChanged: (int page) => updatePageState(page),
+                  children: <Widget>[
+                    buildPageOne(),
+                    buildPageTwo(),
+                  ],
                 ),
                 Container(
                   margin: EdgeInsets.only(bottom: 30.0),
@@ -163,51 +131,82 @@ class _RegisterPageState extends State<RegisterPage>
     }
   }
 
-  Container buildPageOne() {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(top: 250),
-            child: Image.asset(
-              Assets.app_icon_fg,
-              height: 100.0,
+  void initApp() {
+    usernameFieldAnimationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    profilePicHeightAnimation =
+    Tween(begin: 100.0, end: 0.0).animate(usernameFieldAnimationController)
+      ..addListener(() {
+        setState(() {});
+      });
+    usernameAnimation =
+    Tween(begin: 50.0, end: 10.0).animate(usernameFieldAnimationController)
+      ..addListener(() {
+        setState(() {});
+      });
+    ageAnimation =
+    Tween(begin: 80.0, end: 10.0).animate(usernameFieldAnimationController)
+      ..addListener(() {
+        setState(() {});
+      });
+    usernameFocusNode.addListener(() {
+      if (usernameFocusNode.hasFocus) {
+        usernameFieldAnimationController.forward();
+      } else {
+        usernameFieldAnimationController.reverse();
+      }
+    });
+    pageController.addListener(() {
+      setState(() {
+        begin = Alignment(pageController.page, pageController.page);
+        end = Alignment(1 - pageController.page, 1 - pageController.page);
+      });
+    });
+  }
+
+  Column buildPageOne() {
+    return Column(
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.only(top: 250),
+          child: Image.asset(
+            Assets.app_icon_fg,
+            height: 100.0,
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 30),
+          child: Text(
+            'Messio Messenger',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 22,
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(top: 30),
-            child: Text(
-              'Messio Messenger',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 22,
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 100),
+          child: ButtonTheme(
+            height: 40,
+            child: FlatButton.icon(
+              onPressed: () => updatePageState(1),
+              color: Colors.transparent,
+              icon: Image.asset(
+                Assets.google_button,
+                height: 25,
+              ),
+              label: Text(
+                'Sign In with Google',
+                style: TextStyle(
+                  color: Palette.primaryTextColorLight,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(top: 100),
-            child: ButtonTheme(
-              height: 40,
-              child: FlatButton.icon(
-                onPressed: () => updatePageState(1),
-                color: Colors.transparent,
-                icon: Image.asset(
-                  Assets.google_button,
-                  height: 25,
-                ),
-                label: Text(
-                  'Sign In with Google',
-                  style: TextStyle(
-                    color: Palette.primaryTextColorLight,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -223,28 +222,26 @@ class _RegisterPageState extends State<RegisterPage>
             SizedBox(
               height: profilePicHeightAnimation.value,
             ),
-            Container(
-              child: CircleAvatar(
-                backgroundImage: Image.asset(Assets.user).image,
-                radius: 60.0,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(
-                      Icons.camera,
+            CircleAvatar(
+              backgroundImage: Image.asset(Assets.user).image,
+              radius: 60.0,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                    Icons.camera,
+                    color: Colors.white,
+                    size: 15.0,
+                  ),
+                  Text(
+                    'Set Profile Picture',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
                       color: Colors.white,
-                      size: 15.0,
+                      fontSize: 10.0,
                     ),
-                    Text(
-                      'Set Profile Picture',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 10.0,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             SizedBox(
@@ -276,11 +273,9 @@ class _RegisterPageState extends State<RegisterPage>
             SizedBox(
               height: usernameAnimation.value,
             ),
-            Container(
-              child: Text(
-                'Choose a username',
-                style: Styles.questionLight,
-              ),
+            Text(
+              'Choose a username',
+              style: Styles.questionLight,
             ),
             Container(
               margin: EdgeInsets.only(top: 20.0),
@@ -323,7 +318,7 @@ class _RegisterPageState extends State<RegisterPage>
     }
   }
 
-  Future<bool> onWillPop() {
+  Future<bool> onWillPop() async {
     if (currentPage == 1) {
       // Go to page 1 if currently on second page
       pageController.previousPage(
@@ -331,9 +326,9 @@ class _RegisterPageState extends State<RegisterPage>
         curve: Curves.easeOut,
       );
 
-      return Future.value(false);
+      return false;
     } else {
-      return Future.value(true);
+      return true;
     }
   }
 
