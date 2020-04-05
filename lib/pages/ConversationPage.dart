@@ -17,34 +17,20 @@ class _ConversationPageState extends State<ConversationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: ChatAppBar(),
-        body: Container(
-          color: Palette.chatBackgroundColor,
-          child: Stack(
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  ChatListWidget(),
-                  GestureDetector(
-                    child: InputWidget(),
-                    onPanUpdate: (details) {
-                      if (details.delta.dy < 0) {
-                        _scaffoldKey.currentState
-                            .showBottomSheet<Null>((BuildContext context) {
-                              return ConversationBottomSheet();
-                        });
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ],
+    return Column(
+      children: <Widget>[
+        Expanded(
+          flex: 2,
+          child: ChatAppBar(),
+        ),
+        Expanded(
+          flex: 11,
+          child: Container(
+            color: Palette.chatBackgroundColor,
+            child: ChatListWidget(),
           ),
         ),
-      ),
+      ],
     );
   }
 }
