@@ -5,9 +5,10 @@ import 'package:messio/models/User.dart';
 import 'package:messio/providers/BaseProviders.dart';
 
 class UserDataProvider extends BaseUserDataProvider {
-  Firestore firestoreDb = Firestore.instance;
+  final Firestore firestoreDb;
 
-  UserDataProvider({this.firestoreDb});
+  UserDataProvider({Firestore firestoreDb})
+      : firestoreDb = firestoreDb ?? Firestore.instance;
 
   @override
   Future<bool> isProfileComplete(String uid) async {
