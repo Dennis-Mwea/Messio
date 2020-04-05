@@ -5,14 +5,17 @@ import 'package:messio/models/User.dart';
 import 'package:messio/providers/BaseProviders.dart';
 
 class UserDataProvider extends BaseUserDataProvider {
-  final firestoreDb = Firestore.instance;
+  Firestore firestoreDb = Firestore.instance;
+
+  UserDataProvider({this.firestoreDb});
 
   @override
   Future<bool> isProfileComplete(String uid) async {
     DocumentReference ref =
         firestoreDb.collection(Paths.userPaths).document(uid);
     final DocumentSnapshot currentDocument = await ref.get();
-    return (currentDocument.exists &&
+    return (currentDocument != null &&
+        currentDocument.exists &&
         currentDocument.data.containsKey('username') &&
         currentDocument.data.containsKey('age'));
   }
@@ -21,7 +24,7 @@ class UserDataProvider extends BaseUserDataProvider {
   Future<User> saveDetailsFromGoogleAuth(FirebaseUser user) async {
     DocumentReference ref =
         firestoreDb.collection(Paths.userPaths).document(user.uid);
-    final bool userExists = await ref.snapshots().isEmpty;
+    final bool userExists = !await ref.snapshots().isEmpty;
     var data = {
       'uid': user.uid,
       'email': user.email,
