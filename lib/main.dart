@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messio/blocs/authentication/AuthenticationBloc.dart';
 import 'package:messio/config/Palette.dart';
-import 'package:messio/pages/ContactListPage.dart';
 import 'package:messio/pages/ConversationPageSlide.dart';
 import 'package:messio/pages/RegisterPage.dart';
 import 'package:messio/repositories/AuthenticationRepository.dart';

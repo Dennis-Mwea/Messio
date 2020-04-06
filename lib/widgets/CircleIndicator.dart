@@ -3,7 +3,7 @@ import 'package:messio/config/Palette.dart';
 
 @immutable
 class CircleIndicator extends StatefulWidget {
-  bool isActive;
+  final bool isActive;
 
   CircleIndicator(this.isActive);
 
