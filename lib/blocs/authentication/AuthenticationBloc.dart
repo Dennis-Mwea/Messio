@@ -56,8 +56,7 @@ class AuthenticationBloc
 
       if (isSignedIn) {
         final user = await authenticationRepository.getCurrentUser();
-        bool isProfileComplete =
-            await userDataRepository.isProfileComplete(user.uid);
+        bool isProfileComplete = await userDataRepository.isProfileComplete();
         print(isProfileComplete);
 
         if (isProfileComplete) {
@@ -81,8 +80,7 @@ class AuthenticationBloc
     try {
       FirebaseUser firebaseUser =
           await authenticationRepository.signInWithGoogle();
-      bool isProfileComplete =
-          await userDataRepository.isProfileComplete(firebaseUser.uid);
+      bool isProfileComplete = await userDataRepository.isProfileComplete();
       print(isProfileComplete);
 
       if (isProfileComplete) {

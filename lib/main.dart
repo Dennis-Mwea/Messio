@@ -8,13 +8,16 @@ import 'package:messio/pages/RegisterPage.dart';
 import 'package:messio/repositories/AuthenticationRepository.dart';
 import 'package:messio/repositories/StorageRepository.dart';
 import 'package:messio/repositories/UserDataRepository.dart';
+import 'package:messio/utils/SharedObjects.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'blocs/authentication/Bloc.dart';
 
-void main() {
+void main() async {
   final AuthenticationRepository authRepository = AuthenticationRepository();
   final UserDataRepository userDataRepository = UserDataRepository();
   final StorageRepository storageRepository = StorageRepository();
+  SharedObjects.prefs = await SharedPreferences.getInstance();
 
   runApp(
     BlocProvider(

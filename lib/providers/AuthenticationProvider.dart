@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:messio/config/Constants.dart';
+import 'package:messio/utils/SharedObjects.dart';
 
 import 'BaseProviders.dart';
 
@@ -21,8 +23,10 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
       accessToken: authentication.accessToken,
     );
     await firebaseAuth.signInWithCredential(credential);
+    FirebaseUser firebaseUser = await firebaseAuth.currentUser();
+    SharedObjects.prefs.setString(Constants.sessionUid, firebaseUser.uid);
 
-    return firebaseAuth.currentUser();
+    return firebaseUser;
   }
 
   @override

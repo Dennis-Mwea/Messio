@@ -30,8 +30,11 @@ class Styles {
     color: Palette.primaryTextColorLight,
     fontSize: 14,
   );
+  static TextStyle hintText = TextStyle(
+    color: Palette.hintTextColor,
+  );
   static TextStyle hintTextLight = TextStyle(
-    color: Palette.secondaryTextColorLight,
+    color: Palette.hintTextColorLight,
   );
   static TextStyle text = TextStyle(
     color: Palette.secondaryTextColor,

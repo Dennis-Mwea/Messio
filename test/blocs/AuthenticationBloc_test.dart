@@ -61,7 +61,7 @@ void main() {
           .thenAnswer((_) => Future.value(true));
       when(authenticationRepository.getCurrentUser())
           .thenAnswer((_) => Future.value(FirebaseUserMock()));
-      when(userDataRepository.isProfileComplete(any))
+      when(userDataRepository.isProfileComplete())
           .thenAnswer((_) => Future.value(true));
 
       final expectedStates = [
@@ -80,7 +80,7 @@ void main() {
           .thenAnswer((_) => Future.value(true));
       when(authenticationRepository.getCurrentUser())
           .thenAnswer((_) => Future.value(FirebaseUserMock()));
-      when(userDataRepository.isProfileComplete(any))
+      when(userDataRepository.isProfileComplete())
           .thenAnswer((_) => Future.value(false));
       final expectedStates = [
         Uninitialized(),
@@ -101,7 +101,7 @@ void main() {
         () {
       when(authenticationRepository.signInWithGoogle())
           .thenAnswer((_) => Future.value(firebaseUser));
-      when(userDataRepository.isProfileComplete(any))
+      when(userDataRepository.isProfileComplete())
           .thenAnswer((_) => Future.value(true));
       final expectedStates = [
         Uninitialized(),
@@ -117,7 +117,7 @@ void main() {
         () {
       when(authenticationRepository.signInWithGoogle())
           .thenAnswer((_) => Future.value(firebaseUser));
-      when(userDataRepository.isProfileComplete(any))
+      when(userDataRepository.isProfileComplete())
           .thenAnswer((_) => Future.value(false));
       final expectedStates = [
         Uninitialized(),

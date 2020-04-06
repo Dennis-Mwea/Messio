@@ -73,7 +73,7 @@ void main() {
       when(collectionReference.document(any)).thenReturn(documentReference);
       expect(await documentReference.snapshots().isEmpty, true);
       User user = await userDataProvider.saveProfileDetails(
-          'uid', 'http://www.github.com', 18, 'johndoe');
+          'http://www.github.com', 18, 'johndoe');
       expect(await documentReference.snapshots().isEmpty, false);
       expect(user.age, 18); // checking if passed data is saved
       expect(user.username, 'johndoe');
@@ -89,7 +89,7 @@ void main() {
       when(collectionReference.document(any)).thenReturn(documentReference);
       when(documentSnapshot.exists).thenReturn(true);
       expect(await documentReference.snapshots().isEmpty, false);
-      expect(await userDataProvider.isProfileComplete('uid'), true);
+      expect(await userDataProvider.isProfileComplete(), true);
 
       //clear profile data. Shoudl return false now
       documentReference = DocumentReferenceMock();
@@ -97,7 +97,7 @@ void main() {
       when(collectionReference.document(any)).thenReturn(documentReference);
       when(documentSnapshot.exists).thenReturn(true);
       expect(await documentReference.snapshots().isEmpty, true);
-      expect(await userDataProvider.isProfileComplete('uid'), false);
+      expect(await userDataProvider.isProfileComplete(), false);
     });
   });
 }

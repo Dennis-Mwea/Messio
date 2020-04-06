@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:messio/config/Palette.dart';
 
+@immutable
 class CircleIndicator extends StatefulWidget {
   bool isActive;
 
