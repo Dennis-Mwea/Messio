@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:messio/models/Contact.dart';
+import 'package:messio/utils/Exceptions.dart';
 
 @immutable
 abstract class ContactsState extends Equatable {
@@ -10,6 +11,11 @@ abstract class ContactsState extends Equatable {
 class InitialContactsState extends ContactsState {
   @override
   String toString() => 'InitialContactsState';
+}
+
+class FetchingContactsState extends ContactsState {
+  @override
+  String toString() => 'FetchingContactsState';
 }
 
 class FetchedContactsState extends ContactsState {
@@ -36,6 +42,9 @@ class AddContactSuccessState extends ContactsState {
 }
 
 class AddContactFailedState extends ContactsState {
+  final MessioException exception;
+  AddContactFailedState(this.exception);
+
   @override
   String toString() => 'AddContactFailedState';
 }
@@ -46,6 +55,9 @@ class ClickedContactState extends ContactsState {
 }
 
 class ErrorState extends ContactsState {
+  final MessioException exception;
+  ErrorState(this.exception);
+
   @override
   String toString() => 'ErrorState';
 }

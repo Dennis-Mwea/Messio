@@ -70,16 +70,25 @@ class UserDataProvider extends BaseUserDataProvider {
 
   @override
   Future<List<Contact>> getContacts() async {
-    CollectionReference ref = firestoreDb
-        .collection(Paths.userPaths)
-        .document(SharedObjects.prefs.getString(Constants.sessionUid))
-        .collection(Paths.contactsPath);
-    QuerySnapshot contactsSnapshot = await ref.getDocuments();
-    List<Contact> contacts = List();
-    contactsSnapshot.documents
-        .forEach((document) => contacts.add(Contact.fromFirestore(document)));
-
-    return contacts;
+    CollectionReference userRef = firestoreDb.collection(Paths.userPaths);
+    DocumentReference ref =
+        userRef.document(SharedObjects.prefs.get(Constants.sessionUid));
+    DocumentSnapshot documentSnapshot = await ref.get();
+    List<String> contacts;
+    if (documentSnapshot.data['contacts'] == null) {
+      ref.updateData({'contacts': []});
+      contacts = List();
+    } else {
+      contacts = List.from(documentSnapshot.data['contacts']);
+    }
+    List<Contact> contactList = List();
+    for (String username in contacts) {
+      print(username);
+      String uid = await getUidByUsername(username);
+      DocumentSnapshot contactSnapshot = await userRef.document(uid).get();
+      contactList.add(Contact.fromFirestore(contactSnapshot));
+    }
+    return contactList;
   }
 
   @override
@@ -90,9 +99,16 @@ class UserDataProvider extends BaseUserDataProvider {
         .collection(Paths.contactsPath)
         .document(username);
 
-    User user = await getUser(username);
-
-    await ref.setData({'username': username, 'name': user.name});
+    var documentSnapshot = await ref.get();
+    print(documentSnapshot.data);
+    List<String> contacts = documentSnapshot.data['contacts'] != null
+        ? List.from(documentSnapshot.data['contacts'])
+        : List();
+    if (contacts.contains(username)) {
+      throw ContactAlreadyExistsException();
+    }
+    contacts.add(username);
+    ref.updateData({'contacts': contacts});
   }
 
   @override
@@ -116,7 +132,9 @@ class UserDataProvider extends BaseUserDataProvider {
 
     DocumentSnapshot documentSnapshot = await ref.get();
     //check if uid mapping for supplied username exists
-    if (documentSnapshot.exists) {
+    if (documentSnapshot != null &&
+        documentSnapshot.exists &&
+        documentSnapshot.data['uid'] != null) {
       return documentSnapshot.data['uid'];
     } else {
       throw UsernameMappingUndefinedException();
