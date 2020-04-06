@@ -1,9 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:messio/models/User.dart';
 import 'package:messio/providers/UserDataProvider.dart';
+import 'package:messio/utils/SharedObjects.dart';
 import 'package:mockito/mockito.dart';
 
 import '../mock/FirebaseMock.dart';
+import '../mock/SharedObjectsMock.dart';
 
 void main() {
   group('UserDataProvider', () {
@@ -14,6 +16,8 @@ void main() {
     CollectionReferenceMock collectionReference = CollectionReferenceMock();
     DocumentSnapshotMock documentSnapshot = DocumentSnapshotMock();
     DocumentReferenceMock documentReference = DocumentReferenceMock();
+    SharedPreferencesMock sharedPreferencesMock = SharedPreferencesMock();
+    SharedObjects.prefs = sharedPreferencesMock;
 
     test(
         'saveDetailsFromGoogleAuth returns a user with the details from FirebaseUser Object passed',
@@ -36,6 +40,8 @@ void main() {
     test(
         'saveDetailsFromGoogleAuth if there is not existing image write the image from firebase user',
         () async {
+      when(SharedObjects.prefs.get(any)).thenReturn('uid');
+      when(SharedObjects.prefs.get(any)).thenReturn('');
       documentReference = DocumentReferenceMock();
       when(fireStore.collection(any)).thenReturn(collectionReference);
       when(collectionReference.document(any)).thenReturn(documentReference);
@@ -51,6 +57,7 @@ void main() {
     test(
         'saveDetailsFromGoogleAuth if there is existing image, do not write the image from firebase user',
         () async {
+      when(SharedObjects.prefs.get(any)).thenReturn('uid');
       documentSnapshot.data['photoUrl'] =
           'http://www.google.com'; //create a snapshot first to mock existing user
       documentReference =
@@ -68,12 +75,14 @@ void main() {
     });
 
     test('saveProfileDetails saves the details', () async {
+      when(sharedPreferencesMock.get(any)).thenReturn('uid');
       documentReference = DocumentReferenceMock(); //create a user
       when(fireStore.collection(any)).thenReturn(collectionReference);
       when(collectionReference.document(any)).thenReturn(documentReference);
       expect(await documentReference.snapshots().isEmpty, true);
       User user = await userDataProvider.saveProfileDetails(
           'http://www.github.com', 18, 'johndoe');
+      when(sharedPreferencesMock.get(any)).thenReturn('uid');
       expect(await documentReference.snapshots().isEmpty, false);
       expect(user.age, 18); // checking if passed data is saved
       expect(user.username, 'johndoe');

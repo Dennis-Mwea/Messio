@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:messio/models/Contact.dart';
 
 @immutable
 abstract class ContactsEvent extends Equatable {
@@ -11,9 +12,17 @@ class FetchContactsEvent extends ContactsEvent {
   String toString() => 'FetchContactsEvent';
 }
 
+// Dispatch received contacts from stream
+class ReceivedContactsEvent extends ContactsEvent {
+  final List<Contact> contacts;
+  ReceivedContactsEvent(this.contacts) : super([contacts]);
+  @override
+  String toString() => 'ReceivedContactsEvent';
+}
+
 class AddContactEvent extends ContactsEvent {
   final String username;
-  AddContactEvent({@required this.username});
+  AddContactEvent({@required this.username}) : super([username]);
 
   @override
   String toString() => 'AddContactEvent';

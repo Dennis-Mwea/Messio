@@ -16,7 +16,7 @@ abstract class BaseUserDataProvider {
   Future<User> saveProfileDetails(
       String profileImageUrl, int age, String username);
   Future<bool> isProfileComplete();
-  Future<List<Contact>> getContacts();
+  Stream<List<Contact>> getContacts();
   Future<void> addContact(String username);
   Future<User> getUser(String username);
   Future<String> getUidByUsername(String username);

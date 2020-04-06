@@ -20,7 +20,7 @@ class FetchingContactsState extends ContactsState {
 
 class FetchedContactsState extends ContactsState {
   final List<Contact> contacts;
-  FetchedContactsState(this.contacts);
+  FetchedContactsState(this.contacts) : super([contacts]);
 
   @override
   String toString() => 'FetchedContactsState';
@@ -43,7 +43,7 @@ class AddContactSuccessState extends ContactsState {
 
 class AddContactFailedState extends ContactsState {
   final MessioException exception;
-  AddContactFailedState(this.exception);
+  AddContactFailedState(this.exception) : super([exception]);
 
   @override
   String toString() => 'AddContactFailedState';
@@ -56,7 +56,7 @@ class ClickedContactState extends ContactsState {
 
 class ErrorState extends ContactsState {
   final MessioException exception;
-  ErrorState(this.exception);
+  ErrorState(this.exception) : super([exception]);
 
   @override
   String toString() => 'ErrorState';
