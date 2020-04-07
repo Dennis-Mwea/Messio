@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:messio/models/User.dart';
+import 'package:meta/meta.dart';
 
 @immutable
 abstract class AuthenticationState extends Equatable {
@@ -28,12 +28,12 @@ class Authenticated extends AuthenticationState {
   String toString() => 'Authenticated';
 }
 
-class PrefillData extends AuthenticationState {
+class PreFillData extends AuthenticationState {
   final User user;
-  PrefillData(this.user);
+  PreFillData(this.user);
 
   @override
-  String toString() => 'PrefillData';
+  String toString() => 'PreFillData';
 }
 
 class UnAuthenticated extends AuthenticationState {
@@ -46,7 +46,7 @@ class ReceivedProfilePicture extends AuthenticationState {
   ReceivedProfilePicture(this.file);
 
   @override
-  String toString() => 'ReceivedProfilePicture';
+  toString() => 'ReceivedProfilePicture';
 }
 
 class ProfileUpdateInProgress extends AuthenticationState {

@@ -15,7 +15,9 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   ContactsState get initialState => InitialContactsState();
 
   @override
-  Stream<ContactsState> mapEventToState(ContactsEvent event) async* {
+  Stream<ContactsState> mapEventToState(
+    ContactsEvent event,
+  ) async* {
     print(event);
 
     if (event is FetchContactsEvent) {
@@ -29,10 +31,8 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
             });
       } on MessioException catch (exception) {
         print(exception.errorMessage());
-
-        yield (ErrorState(exception));
+        yield ErrorState(exception);
       }
-      yield* mapFetchContactsEventToState();
     }
 
     if (event is ReceivedContactsEvent) {
@@ -61,7 +61,6 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
           });
     } on MessioException catch (exception) {
       print(exception.errorMessage());
-
       yield ErrorState(exception);
     }
   }
@@ -69,13 +68,18 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   Stream<ContactsState> mapAddContactEventToState(String username) async* {
     try {
       yield AddContactProgressState();
+      await userDataRepository.addContact(username);
+      yield AddContactSuccessState();
+      //dispatch(FetchContactsEvent());
     } on MessioException catch (exception) {
       print(exception.errorMessage());
       yield AddContactFailedState(exception);
     }
   }
 
-  Stream<ContactsState> mapClickedContactEventToState() async* {}
+  Stream<ContactsState> mapClickedContactEventToState() async* {
+    //TODO: Redirect to chat screen
+  }
 
   @override
   void dispose() {

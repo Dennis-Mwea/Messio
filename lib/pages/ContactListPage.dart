@@ -151,7 +151,6 @@ class _ContactListPageState extends State<ContactListPage>
   }
 
   void showAddContactsBottomSheet(parentContext) async {
-    print('object');
     await showModalBottomSheetApp(
         context: context,
         builder: (BuildContext bc) {

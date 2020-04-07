@@ -4,6 +4,7 @@ import 'package:messio/config/Palette.dart';
 class NavigationPillWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // TODO: implement build
     return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -14,21 +15,19 @@ class NavigationPillWidget extends StatelessWidget {
               child: Wrap(
                 children: <Widget>[
                   Container(
-                    width: 50.0,
-                    margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
-                    height: 5.0,
-                    decoration: BoxDecoration(
+                    width: 50,
+                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    height: 5,
+                    decoration: new BoxDecoration(
                       color: Palette.accentColor,
                       shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8.0),
-                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );

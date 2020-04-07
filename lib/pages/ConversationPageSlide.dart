@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:messio/pages/ConversationBottomSheet.dart';
-import 'package:messio/pages/ConversationPage.dart';
 import 'package:messio/widgets/InputWidget.dart';
 import 'package:rubber/rubber.dart';
+
+import 'ConversationBottomSheet.dart';
+import 'ConversationPage.dart';
 
 class ConversationPageSlide extends StatefulWidget {
   @override

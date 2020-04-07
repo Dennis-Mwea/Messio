@@ -5,9 +5,7 @@ class QuickScrollBar extends StatefulWidget {
   final List nameList;
   final ScrollController scrollController;
 
-  const QuickScrollBar(
-      {Key key, @required this.nameList, @required this.scrollController})
-      : super(key: key);
+  QuickScrollBar({@required this.nameList, @required this.scrollController});
 
   @override
   _QuickScrollBarState createState() =>
@@ -19,7 +17,7 @@ class _QuickScrollBarState extends State<QuickScrollBar> {
   var scrollBarText;
   var scrollBarTextPrev;
   var scrollBarHeight;
-  var contactRowSize = 45.0;
+  var contactRowSize = 45.0; //NOTE: size items
   var scrollBarMarginRight = 50.0;
   var scrollBarContainerHeight;
   var scrollBarPosSelected = 0;
@@ -60,46 +58,6 @@ class _QuickScrollBarState extends State<QuickScrollBar> {
     'Y',
     'Z'
   ];
-
-  @override
-  Widget build(BuildContext context) {
-    screenHeight = MediaQuery.of(context).size.height;
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        scrollBarHeightDiff = screenHeight - constraints.biggest.height;
-        scrollBarHeight = (constraints.biggest.height) / alphabetList.length;
-        scrollBarContainerHeight = (constraints.biggest.height); //NO
-        return Stack(
-          children: <Widget>[
-            Align(
-              alignment: Alignment.centerRight,
-              child: GestureDetector(
-                onVerticalDragEnd: _onVerticalEnd,
-                onVerticalDragUpdate: _onVerticalDragUpdate,
-                onVerticalDragStart: _onVerticalDragStart,
-                child: Container(
-                  //height: 20.0 * 26,
-                  color: Colors.transparent,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: []..addAll(
-                        List.generate(alphabetList.length,
-                            (index) => _getAlphabetItem(index)),
-                      ),
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              right: scrollBarMarginRight,
-              top: offsetContainer,
-              child: getBubble(),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   void _onVerticalDragUpdate(DragUpdateDetails details) {
     setState(() {
@@ -145,9 +103,9 @@ class _QuickScrollBarState extends State<QuickScrollBar> {
       return Container();
     }
     return Container(
-      decoration: new BoxDecoration(
+      decoration: BoxDecoration(
           color: Palette.accentColor,
-          borderRadius: new BorderRadius.all(const Radius.circular(30.0))),
+          borderRadius: BorderRadius.all(const Radius.circular(30.0))),
       width: 30,
       height: 30,
       child: Center(
@@ -181,6 +139,44 @@ class _QuickScrollBarState extends State<QuickScrollBar> {
   void _onVerticalEnd(DragEndDetails details) {
     setState(() {
       scrollBarBubbleVisibility = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    screenHeight = MediaQuery.of(context).size.height;
+    return LayoutBuilder(builder: (context, constraints) {
+      scrollBarHeightDiff = screenHeight - constraints.biggest.height;
+      scrollBarHeight = (constraints.biggest.height) / alphabetList.length;
+      scrollBarContainerHeight = (constraints.biggest.height); //NO
+      return Stack(
+        children: <Widget>[
+          Align(
+            alignment: Alignment.centerRight,
+            child: GestureDetector(
+              onVerticalDragEnd: _onVerticalEnd,
+              onVerticalDragUpdate: _onVerticalDragUpdate,
+              onVerticalDragStart: _onVerticalDragStart,
+              child: Container(
+                //height: 20.0 * 26,
+                color: Colors.transparent,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: []..addAll(
+                      List.generate(alphabetList.length,
+                          (index) => _getAlphabetItem(index)),
+                    ),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            right: scrollBarMarginRight,
+            top: offsetContainer,
+            child: getBubble(),
+          ),
+        ],
+      );
     });
   }
 }

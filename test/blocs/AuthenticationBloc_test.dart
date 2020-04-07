@@ -87,7 +87,7 @@ void main() {
         AuthInProgress(),
         Authenticated(firebaseUser),
         ProfileUpdateInProgress(),
-        PrefillData(user),
+        PreFillData(user),
       ];
       expectLater(authenticationBloc.state, emitsInOrder(expectedStates));
 
@@ -124,7 +124,7 @@ void main() {
         AuthInProgress(),
         Authenticated(firebaseUser),
         ProfileUpdateInProgress(),
-        PrefillData(user)
+        PreFillData(user)
       ];
       expectLater(authenticationBloc.state, emitsInOrder(expectedStates));
       authenticationBloc.dispatch(ClickedGoogleLogin());
@@ -140,7 +140,7 @@ void main() {
       final expectedStates = [
         Uninitialized(),
         ProfileUpdateInProgress(),
-        PrefillData(user)
+        PreFillData(user)
       ];
       expectLater(authenticationBloc.state, emitsInOrder(expectedStates));
 

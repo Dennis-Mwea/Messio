@@ -26,9 +26,7 @@ class InputWidget extends StatelessWidget {
                           builder: (BuildContext bc) {
                             return Container(
                               child: new Wrap(
-                                children: <Widget>[
-                                  ConversationBottomSheet()
-                                ],
+                                children: <Widget>[ConversationBottomSheet()],
                               ),
                             );
                           })
@@ -42,16 +40,16 @@ class InputWidget extends StatelessWidget {
               Flexible(
                 child: Material(
                     child: Container(
-                      child: TextField(
-                        style:
-                        TextStyle(color: Palette.primaryTextColor, fontSize: 15.0),
-                        controller: textEditingController,
-                        decoration: InputDecoration.collapsed(
-                          hintText: 'Type a message',
-                          hintStyle: TextStyle(color: Palette.greyColor),
-                        ),
-                      ),
-                    )),
+                  child: TextField(
+                    style: TextStyle(
+                        color: Palette.primaryTextColor, fontSize: 15.0),
+                    controller: textEditingController,
+                    decoration: InputDecoration.collapsed(
+                      hintText: 'Type a message',
+                      hintStyle: TextStyle(color: Palette.greyColor),
+                    ),
+                  ),
+                )),
               ),
 
               // Send Message Button

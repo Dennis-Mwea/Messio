@@ -33,8 +33,8 @@ void main() {
       documentSnapshot = await documentReference.get();
       expect(documentSnapshot.data['uid'],
           'uid'); //checking if the data from the passed FirebaseUser object is returned in User
-      expect(user.name, 'John Doe');
-      expect(user.photoUrl, 'http://www.adityag.me');
+      expect(user.name, 'Dennis Mwea');
+      expect(user.photoUrl, 'http://www.dytech.co.ke/me');
     });
 
     test(
@@ -49,9 +49,9 @@ void main() {
           true); //no data is saved, fresh user
       User user =
           await userDataProvider.saveDetailsFromGoogleAuth(FirebaseUserMock());
-      expect(user.name, 'John Doe');
+      expect(user.name, 'Dennis Mwea');
       expect(user.photoUrl,
-          'http://www.adityag.me'); //image from FirebaseUser object is written
+          'http://www.dytech.co.ke/me'); //image from FirebaseUser object is written
     });
 
     test(
@@ -69,7 +69,7 @@ void main() {
       User user =
           await userDataProvider.saveDetailsFromGoogleAuth(FirebaseUserMock());
       expect(await documentReference.snapshots().isEmpty, false);
-      expect(user.name, 'John Doe');
+      expect(user.name, 'Dennis Mwea');
       expect(user.photoUrl,
           'http://www.google.com'); // for existing user the image is not overwritten.
     });

@@ -18,7 +18,7 @@ class _ConversationPageState extends State<ConversationPage> {
         Expanded(
           flex: 2,
           child: ChatAppBar(),
-        ),
+        ), // Custom app bar for chat screen
         Expanded(
           flex: 11,
           child: Container(

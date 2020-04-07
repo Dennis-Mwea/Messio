@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:messio/models/Contact.dart';
 import 'package:messio/utils/Exceptions.dart';
+import 'package:meta/meta.dart';
 
 @immutable
 abstract class ContactsState extends Equatable {
@@ -13,11 +13,13 @@ class InitialContactsState extends ContactsState {
   String toString() => 'InitialContactsState';
 }
 
+//Fetching contacts from firebase
 class FetchingContactsState extends ContactsState {
   @override
   String toString() => 'FetchingContactsState';
 }
 
+//contacts fetched successfully
 class FetchedContactsState extends ContactsState {
   final List<Contact> contacts;
   FetchedContactsState(this.contacts) : super([contacts]);
@@ -26,21 +28,19 @@ class FetchedContactsState extends ContactsState {
   String toString() => 'FetchedContactsState';
 }
 
-class ShowAddContactState extends ContactsState {
-  @override
-  String toString() => 'ShowAddContactState';
-}
-
+// Add Contact Clicked, show progressbar
 class AddContactProgressState extends ContactsState {
   @override
   String toString() => 'AddContactProgressState';
 }
 
+// Add contact success
 class AddContactSuccessState extends ContactsState {
   @override
   String toString() => 'AddContactSuccessState';
 }
 
+// Add contact failed
 class AddContactFailedState extends ContactsState {
   final MessioException exception;
   AddContactFailedState(this.exception) : super([exception]);
@@ -49,11 +49,13 @@ class AddContactFailedState extends ContactsState {
   String toString() => 'AddContactFailedState';
 }
 
+// Clicked a contact item
 class ClickedContactState extends ContactsState {
   @override
   String toString() => 'ClickedContactState';
 }
 
+// Handle errors
 class ErrorState extends ContactsState {
   final MessioException exception;
   ErrorState(this.exception) : super([exception]);

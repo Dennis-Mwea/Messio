@@ -1,7 +1,3 @@
-//Flutter Modal Bottom Sheet
-//Modified by Suvadeep Das
-//Based on https://gist.github.com/andrelsmoraes/9e4af0133bff8960c1feeb0ead7fd749
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -157,13 +153,13 @@ Future<T> showModalBottomSheetApp<T>({
   assert(context != null);
   assert(builder != null);
   return Navigator.push(
-      context,
-      new _ModalBottomSheetRoute<T>(
-        builder: builder,
-        theme: Theme.of(context, shadowThemeOnly: true),
-        barrierLabel:
-            MaterialLocalizations.of(context).modalBarrierDismissLabel,
-        resizeToAvoidBottomPadding: resizeToAvoidBottomPadding,
-        dismissOnTap: dismissOnTap,
-      ));
+    context,
+    new _ModalBottomSheetRoute<T>(
+      builder: builder,
+      theme: Theme.of(context, shadowThemeOnly: true),
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      resizeToAvoidBottomPadding: resizeToAvoidBottomPadding,
+      dismissOnTap: dismissOnTap,
+    ),
+  );
 }
