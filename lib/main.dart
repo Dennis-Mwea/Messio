@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messio/blocs/authentication/AuthenticationBloc.dart';
 import 'package:messio/blocs/contacts/ContactsBloc.dart';
-import 'package:messio/config/Palette.dart';
 import 'package:messio/pages/ConversationPageSlide.dart';
 import 'package:messio/pages/RegisterPage.dart';
 import 'package:messio/repositories/AuthenticationRepository.dart';
@@ -14,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'blocs/authentication/Bloc.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   final AuthenticationRepository authRepository = AuthenticationRepository();
   final UserDataRepository userDataRepository = UserDataRepository();
   final StorageRepository storageRepository = StorageRepository();
@@ -45,7 +45,7 @@ class Messio extends StatelessWidget {
       title: 'Mesio',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Palette.primaryColor,
+        primarySwatch: Colors.blue,
         fontFamily: 'Manrope',
       ),
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(

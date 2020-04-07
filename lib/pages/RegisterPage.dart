@@ -58,7 +58,7 @@ class _RegisterPageState extends State<RegisterPage>
           child: Stack(
             children: <Widget>[
               buildHome(),
-              BlocBuilder(
+              BlocBuilder<AuthenticationBloc, AuthenticationState>(
                 builder: (context, state) {
                   if (state is AuthInProgress ||
                       state is ProfileUpdateInProgress) {

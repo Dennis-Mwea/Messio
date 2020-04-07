@@ -20,7 +20,7 @@ class GradientFab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var fab = FloatingActionButton(
-      elevation: elevation != null ? elevation : 6,
+      elevation: elevation != null ? elevation : 6.0,
       child: Container(
         constraints: BoxConstraints.expand(),
         decoration: BoxDecoration(
@@ -44,7 +44,10 @@ class GradientFab extends StatelessWidget {
             duration: Duration(milliseconds: 1000),
             vsync: vsync,
             curve: Curves.linear,
-            child: ScaleTransition(scale: animation, child: child),
+            child: ScaleTransition(
+              scale: animation,
+              child: fab,
+            ),
           )
         : fab;
   }
