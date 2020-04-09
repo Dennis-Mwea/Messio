@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:messio/config/Palette.dart';
 
@@ -19,35 +21,29 @@ class GradientFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var fab = FloatingActionButton(
-      elevation: elevation != null ? elevation : 6,
+    var fab =FloatingActionButton(
+      elevation: elevation!=null?elevation:6,
       child: Container(
         constraints: BoxConstraints.expand(),
         decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: LinearGradient(
-            begin: Alignment.center,
-            end: Alignment.bottomRight,
-            colors: [
-              Palette.gradientStartColor,
-              Palette.gradientEndColor,
-            ],
-          ),
-        ),
+            shape: BoxShape.circle,
+            gradient: LinearGradient(
+                begin: Alignment.center,
+                end: Alignment.bottomRight,
+                colors: [
+                  Palette.gradientStartColor,
+                  Palette.gradientEndColor
+                ])),
         child: child,
       ),
       onPressed: onPressed,
     );
-    return animation != null
-        ? AnimatedSize(
-            duration: Duration(milliseconds: 1000),
-            curve: Curves.linear,
-            vsync: vsync,
-            child: ScaleTransition(
-              scale: animation,
-              child: fab,
-            ),
-          )
-        : fab;
+    return animation!=null?AnimatedSize(
+        duration: Duration(milliseconds: 1000),
+        curve: Curves.linear,
+        vsync: vsync,
+        child: ScaleTransition(
+            scale: animation,
+            child: fab)):fab;
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:messio/widgets/InputWidget.dart';
 
 void main(){
-  MaterialApp app = MaterialApp(
+   MaterialApp app = MaterialApp(
     home: Scaffold(
         body:  InputWidget()
     ),

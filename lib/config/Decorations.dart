@@ -11,15 +11,13 @@ class Decorations {
       contentPadding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          color: isPrimary ? Palette.secondaryColor : Palette.primaryColor,
-          width: 0.1,
-        ),
+            color: isPrimary ? Palette.secondaryColor : Palette.primaryColor,
+            width: 0.1),
       ),
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          color: isPrimary ? Palette.secondaryColor : Palette.primaryColor,
-          width: 0.1,
-        ),
+            color: isPrimary ? Palette.secondaryColor : Palette.primaryColor,
+            width: 0.1),
       ),
     );
   }

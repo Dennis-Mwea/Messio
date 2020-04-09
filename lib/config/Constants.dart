@@ -1,3 +1,3 @@
 class Constants {
-  static const sessionUid = 'sessionUid';
+  static const sessionUid = "sessionUid";
 }

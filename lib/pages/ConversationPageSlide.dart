@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:messio/pages/ConversationBottomSheet.dart';
+import 'package:messio/pages/ConversationPage.dart';
 import 'package:messio/widgets/InputWidget.dart';
 import 'package:rubber/rubber.dart';
-
-import 'ConversationBottomSheet.dart';
-import 'ConversationPage.dart';
 
 class ConversationPageSlide extends StatefulWidget {
   @override
@@ -19,9 +18,7 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
 
   @override
   void initState() {
-    controller = RubberAnimationController(
-      vsync: this,
-    );
+    controller = RubberAnimationController(vsync: this);
     super.initState();
   }
 
@@ -43,7 +40,6 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
             ),
             Container(
               child: GestureDetector(
-                child: InputWidget(),
                 onPanUpdate: (details) {
                   if (details.delta.dy < 0) {
                     _scaffoldKey.currentState
@@ -52,8 +48,9 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
                     });
                   }
                 },
+                child: InputWidget(),
               ),
-            ),
+            )
           ],
         ),
       ),

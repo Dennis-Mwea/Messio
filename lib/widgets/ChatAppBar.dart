@@ -4,27 +4,28 @@ import 'package:messio/config/Palette.dart';
 import 'package:messio/config/Styles.dart';
 
 class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final double height = 100;
-
+  final double height = 100.0;
   const ChatAppBar();
 
   @override
   Widget build(BuildContext context) {
-// Text style for everything else
-
     return Material(
       child: Container(
-        decoration: new BoxDecoration(boxShadow: [
-          //adds a shadow to the appbar
-          new BoxShadow(color: Colors.grey, blurRadius: 2.0, spreadRadius: 0.1)
-        ]),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey,
+              blurRadius: 2.0,
+              spreadRadius: 0.1,
+            ),
+          ],
+        ),
         child: Container(
-          padding: EdgeInsets.only(top: 10, bottom: 10),
+          padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
           color: Palette.primaryBackgroundColor,
           child: Row(
             children: <Widget>[
               Expanded(
-                //we're dividing the appbar into 7 : 3 ratio. 7 is for content and 3 is for the display picture.
                 flex: 7,
                 child: Center(
                   child: Column(
@@ -40,10 +41,7 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 flex: 2,
                                 child: Center(
                                   child: IconButton(
-                                    icon: Icon(
-                                      Icons.attach_file,
-                                      color: Palette.secondaryColor,
-                                    ),
+                                    icon: Icon(Icons.attach_file),
                                     onPressed: () => {},
                                   ),
                                 ),
@@ -57,22 +55,26 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
-                                      Text('Aditya Gurjar',
-                                          style: Styles.textHeading),
-                                      Text('@adityagurjar', style: Styles.text)
+                                      Text(
+                                        'Dennis Mwea',
+                                        style: Styles.textHeading,
+                                      ),
+                                      Text(
+                                        '@mweadennis',
+                                        style: Styles.text,
+                                      ),
                                     ],
                                   ),
                                 ),
-                              ),
+                              )
                             ],
                           ),
                         ),
                       ),
-                      //second row containing the buttons for media
                       Expanded(
                         flex: 3,
                         child: Container(
-                          padding: EdgeInsets.fromLTRB(20, 5, 5, 0),
+                          padding: EdgeInsets.fromLTRB(20.0, 5.0, 5.0, 0.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -93,7 +95,7 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 width: 30,
                                 color: Palette.primaryTextColor,
                               ),
-                              Text('Files', style: Styles.text)
+                              Text('Files', style: Styles.text),
                             ],
                           ),
                         ),
@@ -102,7 +104,6 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
               ),
-              //This is the display picture
               Expanded(
                 flex: 3,
                 child: Container(

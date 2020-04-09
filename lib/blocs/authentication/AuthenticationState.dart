@@ -46,7 +46,7 @@ class ReceivedProfilePicture extends AuthenticationState {
   ReceivedProfilePicture(this.file);
 
   @override
-  toString() => 'ReceivedProfilePicture';
+  String toString() => 'ReceivedProfilePicture';
 }
 
 class ProfileUpdateInProgress extends AuthenticationState {
@@ -56,5 +56,5 @@ class ProfileUpdateInProgress extends AuthenticationState {
 
 class ProfileUpdated extends AuthenticationState {
   @override
-  String toString() => 'ProfileComplete';
+  String toString() => 'ProfileUpdated';
 }

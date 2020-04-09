@@ -12,80 +12,85 @@ import 'package:messio/utils/SharedObjects.dart';
 
 class UserDataProvider extends BaseUserDataProvider {
   final Firestore firestoreDb;
-
   UserDataProvider({Firestore firestoreDb})
       : firestoreDb = firestoreDb ?? Firestore.instance;
 
   @override
-  Future<bool> isProfileComplete() async {
-    DocumentReference ref = firestoreDb
-        .collection(Paths.userPaths)
-        .document(SharedObjects.prefs.getString(Constants.sessionUid));
-    final DocumentSnapshot currentDocument = await ref.get();
-    return (currentDocument != null &&
-        currentDocument.exists &&
-        currentDocument.data.containsKey('username') &&
-        currentDocument.data.containsKey('age'));
-  }
-
-  @override
   Future<User> saveDetailsFromGoogleAuth(FirebaseUser user) async {
-    DocumentReference ref =
-        firestoreDb.collection(Paths.userPaths).document(user.uid);
-    final bool userExists = !await ref.snapshots().isEmpty;
+    DocumentReference ref = firestoreDb.collection(Paths.usersPath).document(user
+        .uid); //reference of the user's document node in database/users. This node is created using uid
+    final bool userExists =
+        !await ref.snapshots().isEmpty; // check if use exists or not
     var data = {
+      // add details received from google auth
       'uid': user.uid,
       'email': user.email,
       'name': user.displayName,
     };
 
     if (!userExists) {
+      // if user entry exists then we would not want to override the photo url with the one received from google auth
       data['photoUrl'] = user.photoUrl;
     }
-    ref.setData(data, merge: true);
-    final DocumentSnapshot currentDocument = await ref.get();
+    ref.setData(data, merge: true); // set the data
+    final DocumentSnapshot currentDocument =
+        await ref.get(); // get updated data reference
 
-    return User.fromFirestore(currentDocument);
+    return User.fromFirestore(
+        currentDocument); // create a user object and return
   }
 
   @override
   Future<User> saveProfileDetails(
       String profileImageUrl, int age, String username) async {
     String uid = SharedObjects.prefs.getString(Constants.sessionUid);
+    // Get a reference to the map
     DocumentReference mapReference =
         firestoreDb.collection(Paths.usernameUidMapPath).document(username);
     var mapData = {'uid': uid};
+    // map the uid to the username
     mapReference.setData(mapData);
 
-    DocumentReference ref =
-        firestoreDb.collection(Paths.userPaths).document(uid);
-    var data = {
-      'photoUrl': profileImageUrl,
-      'age': age,
-      'username': username,
-    };
-    ref.setData(data, merge: true);
-    final DocumentSnapshot currentDocument = await ref.get();
+    DocumentReference ref = firestoreDb.collection(Paths.usersPath).document(
+        uid); // reference of the user's document node in database/users. This node is created using uid
+    var data = {'photoUrl': profileImageUrl, 'age': age, 'username': username};
+    ref.setData(data);
+    final DocumentSnapshot currentDocument =
+        await ref.get(); // get updated data back from firestore
 
     return User.fromFirestore(currentDocument);
   }
 
   @override
+  Future<bool> isProfileComplete() async {
+    DocumentReference ref = firestoreDb
+        .collection(Paths.usersPath)
+        .document(SharedObjects.prefs.getString(Constants.sessionUid));
+    final DocumentSnapshot currentDocument = await ref.get();
+
+    return (currentDocument != null &&
+        currentDocument.exists &&
+        currentDocument.data.containsKey('username') &&
+        currentDocument.data.containsKey(
+            'age')); // check if it exists, if yes then check if username and age field are there or not. If not then profile incomplete else complete
+  }
+
   Stream<List<Contact>> getContacts() {
-    CollectionReference userRef = firestoreDb.collection(Paths.userPaths);
+    CollectionReference userRef = firestoreDb.collection(Paths.usersPath);
     DocumentReference ref =
         userRef.document(SharedObjects.prefs.get(Constants.sessionUid));
 
     return ref.snapshots().transform(
         StreamTransformer<DocumentSnapshot, List<Contact>>.fromHandlers(
-            handleData: (documentSnapshot, sink) async {
+            handleData: (documentsnapshot, sink) async {
       List<String> contacts;
-      if (documentSnapshot.data['contacts'] == null) {
+      if (documentsnapshot.data['contacts'] == null) {
         ref.updateData({'contacts': []});
         contacts = List();
       } else {
-        contacts = List.from(documentSnapshot.data['contacts']);
+        contacts = List.from(documentsnapshot.data['contacts']);
       }
+
       List<Contact> contactList = List();
       for (String username in contacts) {
         print(username);
@@ -99,12 +104,12 @@ class UserDataProvider extends BaseUserDataProvider {
 
   @override
   Future<void> addContact(String username) async {
+    await getUser(username);
+    // create a node with the username provided in the contacts collection
     DocumentReference ref = firestoreDb
-        .collection(Paths.userPaths)
-        .document(SharedObjects.prefs.getString(Constants.sessionUid))
-        .collection(Paths.contactsPath)
-        .document(username);
-
+        .collection(Paths.usersPath)
+        .document(SharedObjects.prefs.get(Constants.sessionUid));
+    // await to fetch user details of the username provided and set data
     var documentSnapshot = await ref.get();
     print(documentSnapshot.data);
     List<String> contacts = documentSnapshot.data['contacts'] != null
@@ -121,29 +126,23 @@ class UserDataProvider extends BaseUserDataProvider {
   Future<User> getUser(String username) async {
     String uid = await getUidByUsername(username);
     DocumentReference ref =
-        firestoreDb.collection(Paths.userPaths).document(uid);
+        firestoreDb.collection(Paths.usersPath).document(uid);
     DocumentSnapshot snapshot = await ref.get();
-    if (snapshot.exists) {
-      return User.fromFirestore(snapshot);
-    } else {
-      throw UserNotFoundException();
-    }
+
+    return snapshot.exists
+        ? User.fromFirestore(snapshot)
+        : throw UserNotFoundException;
   }
 
   @override
   Future<String> getUidByUsername(String username) async {
-    //get reference to the mapping using username
+    // get reference to the mapping using username
     DocumentReference ref =
         firestoreDb.collection(Paths.usernameUidMapPath).document(username);
+    DocumentSnapshot snapshot = await ref.get();
 
-    DocumentSnapshot documentSnapshot = await ref.get();
-    //check if uid mapping for supplied username exists
-    if (documentSnapshot != null &&
-        documentSnapshot.exists &&
-        documentSnapshot.data['uid'] != null) {
-      return documentSnapshot.data['uid'];
-    } else {
-      throw UsernameMappingUndefinedException();
-    }
+    return snapshot != null && snapshot.exists && snapshot.data['uid'] != null
+        ? snapshot.data['uid']
+        : throw UsernameMappingUndefinedException;
   }
 }

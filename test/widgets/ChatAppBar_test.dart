@@ -2,20 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:messio/widgets/ChatAppBar.dart';
 
-void main(){
+void main() {
   const MaterialApp app = MaterialApp(
-    home: Scaffold(
-        body:  const ChatAppBar()
-    ),
+    home: Scaffold(body: const ChatAppBar()),
   );
-
   testWidgets('ChatAppBar UI Test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(app);
 
     expect(find.text('Dennis Mwea'), findsOneWidget);
-    expect(find.text('@dennismwea'), findsOneWidget);
-    expect(find.byType(IconButton),findsNWidgets(1));
-    expect(find.byType(CircleAvatar),findsOneWidget);
+    expect(find.text('@mweadennis'), findsOneWidget);
+    expect(find.byType(IconButton), findsNWidgets(1));
+    expect(find.byType(CircleAvatar), findsOneWidget);
   });
 }

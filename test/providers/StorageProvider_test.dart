@@ -17,7 +17,6 @@ void main() {
     String resultUrl = "http://www.adityag.me/";
     StorageProvider storageProvider =
         StorageProvider(firebaseStorage: firebaseStorage);
-
     test('Testing if uploadImage returns a url', () async {
       when(firebaseStorage.ref()).thenReturn(rootReference);
       when(storageReference.putFile(any)).thenReturn(storageUploadTask);

@@ -8,7 +8,6 @@ void main(){
         body:  const ChatItemWidget(0)
     ),
   );
-  
   testWidgets('ChatItemWidget UI Test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(app);

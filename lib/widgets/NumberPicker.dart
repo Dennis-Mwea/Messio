@@ -7,6 +7,7 @@ import 'package:infinite_listview/infinite_listview.dart';
 import 'package:messio/config/Styles.dart';
 
 /// Created by Marcin Szałek
+
 ///NumberPicker is a widget designed to pick a number between #minValue and #maxValue
 class NumberPicker extends StatelessWidget {
   ///height of every list element for normal number picker

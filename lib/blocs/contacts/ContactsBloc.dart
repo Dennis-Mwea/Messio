@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:messio/repositories/UserDataRepository.dart';
 import 'package:messio/utils/Exceptions.dart';
 
-import './Bloc.dart';
+import './bloc.dart';
 
 class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   UserDataRepository userDataRepository;
@@ -53,7 +53,6 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   Stream<ContactsState> mapFetchContactsEventToState() async* {
     try {
       yield FetchingContactsState();
-
       subscription?.cancel();
       subscription = userDataRepository.getContacts().listen((contacts) => {
             print('dispatching $contacts'),
@@ -70,7 +69,6 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
       yield AddContactProgressState();
       await userDataRepository.addContact(username);
       yield AddContactSuccessState();
-      //dispatch(FetchContactsEvent());
     } on MessioException catch (exception) {
       print(exception.errorMessage());
       yield AddContactFailedState(exception);
@@ -78,12 +76,13 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   }
 
   Stream<ContactsState> mapClickedContactEventToState() async* {
-    //TODO: Redirect to chat screen
+    // ToDo: Redirect to chat screen
   }
 
   @override
   void dispose() {
     subscription.cancel();
+
     super.dispose();
   }
 }

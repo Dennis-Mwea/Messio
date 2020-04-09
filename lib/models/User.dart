@@ -29,7 +29,6 @@ class User {
   }
 
   @override
-  String toString() {
-    return '{ uid: $uid, documentId: $documentId, name: $name, age: $age, username: $username, photoUrl: $photoUrl }';
-  }
+  String toString() =>
+      '{ uid: $uid, documentId: $documentId, name: $name, age: $age, username: $username, photoUrl: $photoUrl }';
 }

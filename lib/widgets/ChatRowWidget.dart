@@ -7,7 +7,7 @@ class ChatRowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(15, 5, 0, 5),
+      padding: EdgeInsets.fromLTRB(15.0, 5.0, 0.0, 5.0),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -17,31 +17,33 @@ class ChatRowWidget extends StatelessWidget {
               children: <Widget>[
                 CircleAvatar(
                   radius: 30.0,
-                  backgroundImage: Image.asset(
-                    Assets.user,
-                  ).image,
+                  backgroundImage: Image.asset(Assets.user).image,
                 ),
                 SizedBox(
                   width: 15.0,
                 ),
                 Container(
-                    child: Column(
-                  children: <Widget>[
-                    Text('John Doe', style: Styles.subHeading),
-                    Text(
-                      'What\'s up?',
-                      style: Styles.subText,
-                    )
-                  ],
-                ))
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        'John Doe',
+                        style: Styles.subHeading,
+                      ),
+                      Text(
+                        'What\'s up?',
+                        style: Styles.subText,
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
           Expanded(
             flex: 2,
             child: Column(
-              mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 Text(
                   DateFormat('kk:mm').format(
@@ -50,7 +52,7 @@ class ChatRowWidget extends StatelessWidget {
                 ),
               ],
             ),
-          ),
+          )
         ],
       ),
     );

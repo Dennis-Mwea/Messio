@@ -27,8 +27,9 @@ void main() {
     storageRepository = StorageRepositoryMock();
     firebaseUser = FirebaseUserMock();
     user = User();
+    file = MockFile();
     age = 23;
-    username = 'mweadennis';
+    username = 'johndoe';
     profilePictureUrl = 'http://www.github.com/adityadroid';
     authenticationBloc = AuthenticationBloc(
         userDataRepository: userDataRepository,
@@ -40,46 +41,41 @@ void main() {
     expect(authenticationBloc.initialState, Uninitialized());
   });
 
+  //test the sequence of event emissions for different conditions
   group('AppLaunched', () {
     test('emits [Uninitialized -> Unauthenticated] when not logged in', () {
       when(authenticationRepository.isLoggedIn())
           .thenAnswer((_) => Future.value(false));
-
       final expectedStates = [
         Uninitialized(),
         AuthInProgress(),
-        UnAuthenticated(),
+        UnAuthenticated()
       ];
       expectLater(authenticationBloc.state, emitsInOrder(expectedStates));
+
       authenticationBloc.dispatch(AppLaunched());
     });
-
-    test(
-        'emits [Uninitialized -> ProfileUpdated] when user is logged in and profile is complete',
-        () {
+    test('emits [Uninitialized -> ProfileUpdated] when user is logged in and profile is complete', () {
       when(authenticationRepository.isLoggedIn())
           .thenAnswer((_) => Future.value(true));
       when(authenticationRepository.getCurrentUser())
           .thenAnswer((_) => Future.value(FirebaseUserMock()));
       when(userDataRepository.isProfileComplete())
           .thenAnswer((_) => Future.value(true));
-
       final expectedStates = [
         Uninitialized(),
         AuthInProgress(),
-        ProfileUpdated(),
+        ProfileUpdated()
       ];
       expectLater(authenticationBloc.state, emitsInOrder(expectedStates));
+
       authenticationBloc.dispatch(AppLaunched());
     });
-
-    test(
-        'emits [Uninitialized -> AuthInProgress -> Authenticated -> ProfileUpdateInProgress -> PrefillData] when user is logged in and profile is not complete',
-        () {
+    test('emits [Uninitialized -> AuthInProgress -> Authenticated -> ProfileUpdateInProgress -> PreFillData] when user is logged in and profile is not complete', () {
       when(authenticationRepository.isLoggedIn())
           .thenAnswer((_) => Future.value(true));
       when(authenticationRepository.getCurrentUser())
-          .thenAnswer((_) => Future.value(FirebaseUserMock()));
+          .thenAnswer((_) => Future.value(firebaseUser));
       when(userDataRepository.isProfileComplete())
           .thenAnswer((_) => Future.value(false));
       final expectedStates = [
@@ -87,7 +83,7 @@ void main() {
         AuthInProgress(),
         Authenticated(firebaseUser),
         ProfileUpdateInProgress(),
-        PreFillData(user),
+        PreFillData(user)
       ];
       expectLater(authenticationBloc.state, emitsInOrder(expectedStates));
 
@@ -96,9 +92,7 @@ void main() {
   });
 
   group('ClickedGoogleLogin', () {
-    test(
-        'emits [AuthInProgress -> ProfileUpdated] when the user clicks Google Login button and after login result, the profile is complete',
-        () {
+    test('emits [AuthInProgress -> ProfileUpdated] when the user clicks Google Login button and after login result, the profile is complete', () {
       when(authenticationRepository.signInWithGoogle())
           .thenAnswer((_) => Future.value(firebaseUser));
       when(userDataRepository.isProfileComplete())
@@ -112,9 +106,7 @@ void main() {
       authenticationBloc.dispatch(ClickedGoogleLogin());
     });
 
-    test(
-        'emits [AuthInProgress -> Authenticated -> ProfileUpdateInProgress -> PreFillData] when the user clicks Google Login button and after login result, the profile is found to be incomplete',
-        () {
+    test('emits [AuthInProgress -> Authenticated -> ProfileUpdateInProgress -> PreFillData] when the user clicks Google Login button and after login result, the profile is found to be incomplete', () {
       when(authenticationRepository.signInWithGoogle())
           .thenAnswer((_) => Future.value(firebaseUser));
       when(userDataRepository.isProfileComplete())
@@ -132,9 +124,7 @@ void main() {
   });
 
   group('LoggedIn', () {
-    test(
-        'emits [ProfileUpdateInProgress -> PreFillData] when trigged, this event is trigged once gauth is done and profile is not complete',
-        () {
+    test('emits [ProfileUpdateInProgress -> PreFillData] when trigged, this event is trigged once gauth is done and profile is not complete', () {
       when(userDataRepository.saveDetailsFromGoogleAuth(firebaseUser))
           .thenAnswer((_) => Future.value(user));
       final expectedStates = [
@@ -157,9 +147,7 @@ void main() {
   });
 
   group('SaveProfile', () {
-    test(
-        'emits [ProfileUpdateInProgress -> ProfileUpdated] everytime SaveProfile is dispatched',
-        () {
+    test('emits [ProfileUpdateInProgress -> ProfileUpdated] everytime SaveProfile is dispatched', () {
       when(storageRepository.uploadImage(any, any))
           .thenAnswer((_) => Future.value(profilePictureUrl));
       when(authenticationRepository.getCurrentUser())

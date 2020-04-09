@@ -14,15 +14,13 @@ class Contact {
   }
 
   @override
-  String toString() {
-    return '{ documentId: $documentId, name: $name, username: $username}';
-  }
+  String toString() =>
+      '{ documentId: $documentId, name: $name, username: $username}';
 
   String getFirstName() => name.split(' ')[0];
 
   String getLastName() {
     List names = name.split(' ');
-
     return names.length > 1 ? names[1] : '';
   }
 }

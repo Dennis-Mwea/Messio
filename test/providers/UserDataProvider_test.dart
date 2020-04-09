@@ -34,7 +34,7 @@ void main() {
       expect(documentSnapshot.data['uid'],
           'uid'); //checking if the data from the passed FirebaseUser object is returned in User
       expect(user.name, 'Dennis Mwea');
-      expect(user.photoUrl, 'http://www.dytech.co.ke/me');
+      expect(user.photoUrl, 'http://www.adityag.me');
     });
 
     test(
@@ -49,19 +49,19 @@ void main() {
           true); //no data is saved, fresh user
       User user =
           await userDataProvider.saveDetailsFromGoogleAuth(FirebaseUserMock());
-      expect(user.name, 'Dennis Mwea');
+      expect(user.name, 'John Doe');
       expect(user.photoUrl,
-          'http://www.dytech.co.ke/me'); //image from FirebaseUser object is written
+          'http://www.adityag.me'); //image from FirebaseUser object is written
     });
 
     test(
         'saveDetailsFromGoogleAuth if there is existing image, do not write the image from firebase user',
         () async {
-      when(SharedObjects.prefs.get(any)).thenReturn('uid');
       documentSnapshot.data['photoUrl'] =
           'http://www.google.com'; //create a snapshot first to mock existing user
       documentReference =
           DocumentReferenceMock(documentSnapshotMock: documentSnapshot);
+      when(SharedObjects.prefs.get(any)).thenReturn('uid');
       when(fireStore.collection(any)).thenReturn(collectionReference);
       when(collectionReference.document(any)).thenReturn(documentReference);
       expect(await documentReference.snapshots().isEmpty,
@@ -69,7 +69,7 @@ void main() {
       User user =
           await userDataProvider.saveDetailsFromGoogleAuth(FirebaseUserMock());
       expect(await documentReference.snapshots().isEmpty, false);
-      expect(user.name, 'Dennis Mwea');
+      expect(user.name, 'John Doe');
       expect(user.photoUrl,
           'http://www.google.com'); // for existing user the image is not overwritten.
     });
@@ -82,7 +82,6 @@ void main() {
       expect(await documentReference.snapshots().isEmpty, true);
       User user = await userDataProvider.saveProfileDetails(
           'http://www.github.com', 18, 'johndoe');
-      when(sharedPreferencesMock.get(any)).thenReturn('uid');
       expect(await documentReference.snapshots().isEmpty, false);
       expect(user.age, 18); // checking if passed data is saved
       expect(user.username, 'johndoe');
@@ -94,6 +93,7 @@ void main() {
       documentReference =
           DocumentReferenceMock(documentSnapshotMock: documentSnapshot);
       documentReference.setData({'username': 'johndoe', 'age': 18});
+      when(sharedPreferencesMock.get(any)).thenReturn('uid');
       when(fireStore.collection(any)).thenReturn(collectionReference);
       when(collectionReference.document(any)).thenReturn(documentReference);
       when(documentSnapshot.exists).thenReturn(true);

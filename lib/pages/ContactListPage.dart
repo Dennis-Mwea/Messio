@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:messio/blocs/contacts/Bloc.dart';
+import 'package:messio/blocs/contacts/bloc.dart';
 import 'package:messio/config/Assets.dart';
 import 'package:messio/config/Decorations.dart';
 import 'package:messio/config/Palette.dart';
@@ -181,7 +181,7 @@ class _ContactListPageState extends State<ContactListPage>
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(50, 20, 50, 20),
+                          margin: EdgeInsets.fromLTRB(50, 20, 50, 10),
                           child: TextField(
                             controller: usernameController,
                             textAlign: TextAlign.center,

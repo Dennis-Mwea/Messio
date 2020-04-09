@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-
-import 'ChatItemWidget.dart';
+import 'package:messio/widgets/ChatItemWidget.dart';
 
 class ChatListWidget extends StatelessWidget {
-  final ScrollController listScrollController = new ScrollController();
+  final ScrollController listScrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return ListView.builder(
       padding: EdgeInsets.all(10.0),
       itemBuilder: (context, index) => ChatItemWidget(index),

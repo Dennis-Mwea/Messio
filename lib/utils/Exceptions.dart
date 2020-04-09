@@ -1,18 +1,18 @@
 abstract class MessioException implements Exception {
-  errorMessage();
+  String errorMessage();
 }
 
-class UserNotFoundException implements MessioException {
+class UserNotFoundException extends MessioException {
   @override
-  errorMessage() => 'No user found for provided uid/username';
+  String errorMessage() => 'No user found for provided uid/username.';
 }
 
-class UsernameMappingUndefinedException implements MessioException {
+class UsernameMappingUndefinedException extends MessioException {
   @override
-  errorMessage() => 'User not found';
+  String errorMessage() => 'User not found.';
 }
 
-class ContactAlreadyExistsException implements MessioException {
+class ContactAlreadyExistsException extends MessioException {
   @override
-  String errorMessage() => 'Contact already exists!';
+  String errorMessage() => 'Contact alreaady exists!';
 }

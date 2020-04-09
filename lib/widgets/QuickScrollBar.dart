@@ -5,11 +5,10 @@ class QuickScrollBar extends StatefulWidget {
   final List nameList;
   final ScrollController scrollController;
 
-  QuickScrollBar({@required this.nameList, @required this.scrollController});
+  QuickScrollBar({@required this.nameList,@required this.scrollController});
 
   @override
-  _QuickScrollBarState createState() =>
-      _QuickScrollBarState(nameList, scrollController);
+  _QuickScrollBarState createState() => _QuickScrollBarState(nameList,scrollController);
 }
 
 class _QuickScrollBarState extends State<QuickScrollBar> {
@@ -28,7 +27,7 @@ class _QuickScrollBarState extends State<QuickScrollBar> {
   bool scrollBarBubbleVisibility = false;
   List nameList;
 
-  _QuickScrollBarState(this.nameList, this.scrollController);
+  _QuickScrollBarState(this.nameList,this.scrollController);
 
   List alphabetList = [
     'A',
@@ -103,7 +102,7 @@ class _QuickScrollBarState extends State<QuickScrollBar> {
       return Container();
     }
     return Container(
-      decoration: BoxDecoration(
+      decoration:  BoxDecoration(
           color: Palette.accentColor,
           borderRadius: BorderRadius.all(const Radius.circular(30.0))),
       width: 30,
@@ -119,6 +118,7 @@ class _QuickScrollBarState extends State<QuickScrollBar> {
       ),
     );
   }
+
 
   _getAlphabetItem(int index) {
     return Expanded(
@@ -163,8 +163,8 @@ class _QuickScrollBarState extends State<QuickScrollBar> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: []..addAll(
-                      List.generate(alphabetList.length,
-                          (index) => _getAlphabetItem(index)),
+                      List.generate(
+                          alphabetList.length, (index) => _getAlphabetItem(index)),
                     ),
                 ),
               ),
