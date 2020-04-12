@@ -1,5 +1,6 @@
 import 'package:messio/models/Chat.dart';
 import 'package:messio/models/Message.dart';
+import 'package:messio/models/User.dart';
 import 'package:messio/providers/BaseProviders.dart';
 import 'package:messio/providers/ChatProvider.dart';
 
@@ -11,4 +12,8 @@ class ChatRepository {
       chatProvider.getMessages(chatId);
   Future<void> sendMessage(String chatId, Message message) =>
       chatProvider.sendMessage(chatId, message);
+  Future<String> getChatIdByUsername(String username) =>
+      chatProvider.getChatIdByUsername(username);
+  Future<void> createChatIdForContact(User user) =>
+      chatProvider.createChatIdForContact(user);
 }

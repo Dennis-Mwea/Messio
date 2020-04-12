@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messio/blocs/authentication/Bloc.dart';
 import 'package:messio/blocs/chats/Bloc.dart';
 import 'package:messio/blocs/contacts/Bloc.dart';
+import 'package:messio/pages/ContactListPage.dart';
 import 'package:messio/pages/ConversationPageSlide.dart';
 import 'package:messio/repositories/AuthenticationRepository.dart';
 import 'package:messio/repositories/ChatRepository.dart';
@@ -22,7 +23,7 @@ void main() async {
   final UserDataRepository userDataRepository = UserDataRepository();
   final StorageRepository storageRepository = StorageRepository();
   final ChatRepository chatRepository = ChatRepository();
-  SharedObjects.prefs = await SharedPreferences.getInstance();
+  SharedObjects.prefs = await CachedSharedPreferences.getInstance();
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider<AuthenticationBloc>(
@@ -35,6 +36,7 @@ void main() async {
       BlocProvider<ContactsBloc>(
         builder: (context) => ContactsBloc(
           userDataRepository: userDataRepository,
+          chatRepository: chatRepository,
         ),
       ),
       BlocProvider<ChatBloc>(
@@ -42,7 +44,7 @@ void main() async {
           userDataRepository: userDataRepository,
           storageRepository: storageRepository,
           chatRepository: chatRepository,
-        ),
+        )..dispatch(FetchChatListEvent()),
       )
     ],
     child: Messio(),
@@ -63,7 +65,7 @@ class Messio extends StatelessWidget {
             return RegisterPage();
           } else if (state is ProfileUpdated) {
             // TODO: return home here
-            return ConversationPageSlide();
+            return ContactListPage();
           } else {
             return RegisterPage();
           }

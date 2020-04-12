@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:messio/providers/AuthenticationProvider.dart';
 import 'package:messio/utils/SharedObjects.dart';
 import 'package:mockito/mockito.dart';
+
 import '../mock/FirebaseMock.dart';
 import '../mock/SharedObjectsMock.dart';
 
@@ -25,7 +26,7 @@ void main() {
 
     test('signInWithGoogle returns a Firebase user', () async {
       //mock the method calls
-      when(sharedPreferencesMock.get(any)).thenReturn('uid');
+      when(sharedPreferencesMock.getString(any)).thenReturn('uid');
       when(googleSignIn.signIn()).thenAnswer(
           (_) => Future<GoogleSignInAccountMock>.value(googleSignInAccount));
       when(googleSignInAccount.authentication).thenAnswer((_) =>

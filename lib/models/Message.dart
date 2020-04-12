@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:messio/config/Constants.dart';
+import 'package:messio/utils/SharedObjects.dart';
 
 abstract class Message {
   int timeStamp;
   String senderName;
   String senderUsername;
+  bool isSelf;
 
   Message(this.timeStamp, this.senderName, this.senderUsername);
 
@@ -25,6 +28,8 @@ abstract class Message {
         message = FileMessage.fromFirestore(doc);
         break;
     }
+    message.isSelf = SharedObjects.prefs.getString(Constants.sessionUsername) ==
+        message.senderUsername;
 
     return message;
   }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:messio/blocs/chats/Bloc.dart';
 import 'package:messio/config/Palette.dart';
 import 'package:messio/pages/ConversationBottomSheet.dart';
 
@@ -10,70 +12,75 @@ class InputWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      elevation: 60.0,
+        elevation: 60.0,
         child: Container(
-      child: Row(
-        children: <Widget>[
-          Material(
-            child: new Container(
-              margin: new EdgeInsets.symmetric(horizontal: 1.0),
-              child: new IconButton(
-                icon: new Icon(Icons.face),
-                color: Palette.accentColor,
-                onPressed: () => {
-                  showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext bc) {
-                        return Container(
-                          child: new Wrap(
-                            children: <Widget>[
-                              ConversationBottomSheet()
-                            ],
-                          ),
-                        );
-                      })
-                },
-              ),
-            ),
-            color: Colors.white,
-          ),
-
-          // Text input
-          Flexible(
-            child: Material(
-                child: Container(
-              child: TextField(
-                style:
-                    TextStyle(color: Palette.primaryTextColor, fontSize: 15.0),
-                controller: textEditingController,
-                decoration: InputDecoration.collapsed(
-                  hintText: 'Type a message',
-                  hintStyle: TextStyle(color: Palette.greyColor),
+          child: Row(
+            children: <Widget>[
+              Material(
+                child: new Container(
+                  margin: new EdgeInsets.symmetric(horizontal: 1.0),
+                  child: new IconButton(
+                    icon: new Icon(Icons.face),
+                    color: Palette.accentColor,
+                    onPressed: () => {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext bc) {
+                            return Container(
+                              child: new Wrap(
+                                children: <Widget>[ConversationBottomSheet()],
+                              ),
+                            );
+                          })
+                    },
+                  ),
                 ),
+                color: Colors.white,
               ),
-            )),
-          ),
 
-          // Send Message Button
-          Material(
-            child: new Container(
-              margin: new EdgeInsets.symmetric(horizontal: 8.0),
-              child: new IconButton(
-                icon: new Icon(Icons.send),
-                onPressed: () => {},
-                color: Palette.accentColor,
+              // Text input
+              Flexible(
+                child: Material(
+                    child: Container(
+                  child: TextField(
+                    style: TextStyle(
+                        color: Palette.primaryTextColor, fontSize: 15.0),
+                    controller: textEditingController,
+                    decoration: InputDecoration.collapsed(
+                      hintText: 'Type a message',
+                      hintStyle: TextStyle(color: Palette.greyColor),
+                    ),
+                  ),
+                )),
               ),
-            ),
-            color: Colors.white,
+
+              // Send Message Button
+              Material(
+                child: new Container(
+                  margin: new EdgeInsets.symmetric(horizontal: 8.0),
+                  child: new IconButton(
+                    icon: new Icon(Icons.send),
+                    onPressed: () => sendMessage(context),
+                    color: Palette.accentColor,
+                  ),
+                ),
+                color: Colors.white,
+              ),
+            ],
           ),
-        ],
-      ),
-      width: double.infinity,
-      height: 50.0,
-      decoration: new BoxDecoration(
-          border: new Border(
-              top: new BorderSide(color: Palette.greyColor, width: 0.5)),
-          color: Colors.white),
-    ));
+          width: double.infinity,
+          height: 50.0,
+          decoration: new BoxDecoration(
+              border: new Border(
+                  top: new BorderSide(color: Palette.greyColor, width: 0.5)),
+              color: Colors.white),
+        ));
+  }
+
+  void sendMessage(context) {
+    BlocProvider.of<ChatBloc>(context)
+        .dispatch(SendTextMessageEvent(textEditingController.text));
+
+    textEditingController.clear();
   }
 }

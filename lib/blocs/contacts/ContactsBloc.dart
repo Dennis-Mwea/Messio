@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:messio/models/User.dart';
+import 'package:messio/repositories/ChatRepository.dart';
 import 'package:messio/repositories/UserDataRepository.dart';
 import 'package:messio/utils/Exceptions.dart';
 
@@ -8,8 +10,11 @@ import './Bloc.dart';
 
 class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   UserDataRepository userDataRepository;
+  ChatRepository chatRepository;
   StreamSubscription subscription;
-  ContactsBloc({this.userDataRepository}) : assert(userDataRepository != null);
+  ContactsBloc({this.userDataRepository, this.chatRepository})
+      : assert(userDataRepository != null),
+        assert(chatRepository != null);
 
   @override
   ContactsState get initialState => InitialContactsState();
@@ -40,6 +45,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
     }
 
     if (event is AddContactEvent) {
+      userDataRepository.getUser(event.username);
       yield* mapAddContactEventToState(event.username);
     }
 
@@ -66,6 +72,8 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
     try {
       yield AddContactProgressState();
       await userDataRepository.addContact(username);
+      User user = await userDataRepository.getUser(username);
+      await chatRepository.createChatIdForContact(user);
       yield AddContactSuccessState();
       //dispatch(FetchContactsEvent());
     } on MessioException catch (exception) {
