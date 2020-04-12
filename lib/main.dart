@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:messio/blocs/authentication/Bloc.dart';
 import 'package:messio/blocs/chats/Bloc.dart';
 import 'package:messio/blocs/contacts/Bloc.dart';
 import 'package:messio/pages/ConversationPageSlide.dart';
@@ -10,7 +11,6 @@ import 'package:messio/repositories/UserDataRepository.dart';
 import 'package:messio/utils/SharedObjects.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'blocs/authentication/Bloc.dart';
 import 'config/Palette.dart';
 import 'pages/RegisterPage.dart';
 
