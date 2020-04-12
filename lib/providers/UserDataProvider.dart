@@ -112,6 +112,8 @@ class UserDataProvider extends BaseUserDataProvider {
       DocumentSnapshot contactSnapshot = await userRef.document(uid).get();
       contactList.add(Contact.fromFirestore(contactSnapshot));
     }
+
+    contactList.sort((a, b) => a.name.compareTo(b.name));
     sink.add(contactList);
   }
 
@@ -123,7 +125,6 @@ class UserDataProvider extends BaseUserDataProvider {
         fireStoreDb.collection(Paths.usersPath);
     DocumentReference ref = collectionReference
         .document(SharedObjects.prefs.getString(Constants.sessionUid));
-
 
     //await to fetch user details of the username provided and set data
     final documentSnapshot = await ref.get();
@@ -137,9 +138,11 @@ class UserDataProvider extends BaseUserDataProvider {
     contacts.add(username);
     await ref.setData({'contacts': contacts}, merge: true);
     //contact should be added in the contactlist of both the users. Adding to the second user here
-    String sessionUsername = SharedObjects.prefs.getString(Constants.sessionUsername);
-    DocumentReference contactRef = collectionReference.document(contactUser.documentId);
-    final  contactSnapshot = await contactRef.get();
+    String sessionUsername =
+        SharedObjects.prefs.getString(Constants.sessionUsername);
+    DocumentReference contactRef =
+        collectionReference.document(contactUser.documentId);
+    final contactSnapshot = await contactRef.get();
     contacts = contactSnapshot.data['contacts'] != null
         ? List.from(contactSnapshot.data['contacts'])
         : List();

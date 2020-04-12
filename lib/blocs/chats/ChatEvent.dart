@@ -35,7 +35,7 @@ class FetchConversationDetailsEvent extends ChatEvent {
   String toString() => 'FetchConversationDetailsEvent';
 }
 
-//triggered to fetch messages of chat
+//triggered to fetch messages of chat, this will also keep a subscription for new messages
 class FetchMessagesEvent extends ChatEvent {
   final Chat chat;
   FetchMessagesEvent(this.chat) : super([chat]);
@@ -44,10 +44,23 @@ class FetchMessagesEvent extends ChatEvent {
   String toString() => 'FetchMessagesEvent';
 }
 
+//triggered to fetch messages of chat
+class FetchPreviousMessagesEvent extends ChatEvent {
+  final Chat chat;
+  final Message lastMessage;
+  FetchPreviousMessagesEvent(this.chat, this.lastMessage)
+      : super([chat, lastMessage]);
+
+  @override
+  String toString() => 'FetchPreviousMessagesEvent';
+}
+
 //triggered when messages stream has new data
 class ReceivedMessagesEvent extends ChatEvent {
   final List<Message> messages;
-  ReceivedMessagesEvent(this.messages) : super([messages]);
+  final String username;
+  ReceivedMessagesEvent(this.messages, this.username)
+      : super([messages, username]);
 
   @override
   String toString() => 'ReceivedMessagesEvent';
@@ -59,7 +72,7 @@ class SendTextMessageEvent extends ChatEvent {
   SendTextMessageEvent(this.message) : super([message]);
 
   @override
-  String toString() => 'SendTextMessageEvent';
+  String toString() => 'SendTextMessageEvent {message: $message}';
 }
 
 //triggered to send attachment
@@ -81,5 +94,6 @@ class PageChangedEvent extends ChatEvent {
   PageChangedEvent(this.index, this.activeChat) : super([index, activeChat]);
 
   @override
-  String toString() => 'PageChangedEvent';
+  String toString() =>
+      'PageChangedEvent {index $index, activeChat: $activeChat}';
 }

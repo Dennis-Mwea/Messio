@@ -18,7 +18,8 @@ class ConversationPage extends StatefulWidget {
   const ConversationPage(this.chat);
 }
 
-class _ConversationPageState extends State<ConversationPage> {
+class _ConversationPageState extends State<ConversationPage>
+    with AutomaticKeepAliveClientMixin {
   final Chat chat;
 
   _ConversationPageState(this.chat);
@@ -27,24 +28,31 @@ class _ConversationPageState extends State<ConversationPage> {
 
   @override
   void initState() {
+    super.initState();
+    print('init for $chat');
     chatBloc = BlocProvider.of<ChatBloc>(context);
     chatBloc.dispatch(FetchConversationDetailsEvent(chat));
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    print('build for $chat');
     return Stack(
       children: <Widget>[
         Container(
+          margin: EdgeInsets.only(top: 100.0),
           color: Palette.chatBackgroundColor,
-          child: ChatListWidget(),
+          child: ChatListWidget(chat),
         ),
         SizedBox.fromSize(
-            size: Size.fromHeight(100),
-            child: ChatAppBar()
+          size: Size.fromHeight(100),
+          child: ChatAppBar(chat),
         )
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

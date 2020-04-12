@@ -1,20 +1,22 @@
 import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:messio/models/Chat.dart';
 import 'package:messio/models/Contact.dart';
 import 'package:messio/models/Message.dart';
 import 'package:messio/models/User.dart';
 
-abstract class BaseAuthenticationProvider{
+abstract class BaseAuthenticationProvider {
   Future<FirebaseUser> signInWithGoogle();
   Future<void> signOutUser();
   Future<FirebaseUser> getCurrentUser();
   Future<bool> isLoggedIn();
 }
 
-abstract class BaseUserDataProvider{
+abstract class BaseUserDataProvider {
   Future<User> saveDetailsFromGoogleAuth(FirebaseUser user);
-  Future<User> saveProfileDetails(String profileImageUrl, int age, String username);
+  Future<User> saveProfileDetails(
+      String profileImageUrl, int age, String username);
   Future<bool> isProfileComplete();
   Stream<List<Contact>> getContacts();
   Future<void> addContact(String username);
@@ -22,12 +24,13 @@ abstract class BaseUserDataProvider{
   Future<String> getUidByUsername(String username);
 }
 
-abstract class BaseStorageProvider{
+abstract class BaseStorageProvider {
   Future<String> uploadFile(File file, String path);
 }
 
-abstract class BaseChatProvider{
+abstract class BaseChatProvider {
   Stream<List<Message>> getMessages(String chatId);
+  Future<List<Message>> getPreviousMessages(String chatId, Message lastMessage);
   Stream<List<Chat>> getChats();
   Future<void> sendMessage(String chatId, Message message);
   Future<String> getChatIdByUsername(String username);
