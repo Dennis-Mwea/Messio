@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:messio/blocs/authentication/Bloc.dart';
 import 'package:messio/config/Assets.dart';
 import 'package:messio/config/Decorations.dart';
 import 'package:messio/config/Palette.dart';
@@ -12,7 +13,6 @@ import 'package:messio/config/Transitions.dart';
 import 'package:messio/pages/ContactListPage.dart';
 import 'package:messio/widgets/CircleIndicator.dart';
 import 'package:messio/widgets/NumberPicker.dart';
-import 'package:messio/blocs/authentication/Bloc.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -223,7 +223,9 @@ class _RegisterPageState extends State<RegisterPage>
           profileImage = Image.asset(Assets.user).image;
           if (state is PreFillData) {
             age = state.user.age != null ? state.user.age : 18;
-            profileImage = Image.network(state.user.photoUrl).image;
+            profileImage = state.user.photoUrl != null
+                ? Image.network(state.user.photoUrl).image
+                : Image.asset(Assets.user).image;
           } else if (state is ReceivedProfilePicture) {
             profileImageFile = state.file;
             profileImage = Image.file(profileImageFile).image;

@@ -139,10 +139,24 @@ class ChatProvider extends BaseChatProvider {
 
   Future<String> createChatIdForUsers(
       String selfUsername, String contactUsername) async {
-    CollectionReference collectionReference =
+    CollectionReference chatCollection =
         fireStoreDb.collection(Paths.chatsPath);
-    DocumentReference documentReference = await collectionReference.add({
-      'members': [selfUsername, contactUsername]
+    CollectionReference userUidMapCollection =
+        fireStoreDb.collection(Paths.usernameUidMapPath);
+    CollectionReference usersCollection =
+        fireStoreDb.collection(Paths.usersPath);
+    String selfUid =
+        (await userUidMapCollection.document(selfUsername).get()).data['uid'];
+    String contactUid =
+        (await userUidMapCollection.document(contactUsername).get())
+            .data['uid'];
+    print('self $selfUid , contact $contactUid');
+    DocumentSnapshot selfDocRef = await usersCollection.document(selfUid).get();
+    DocumentSnapshot contactDocRef =
+        await usersCollection.document(contactUid).get();
+    DocumentReference documentReference = await chatCollection.add({
+      'members': [selfUsername, contactUsername],
+      'membersData': [selfDocRef.data, contactDocRef.data]
     });
     return documentReference.documentID;
   }

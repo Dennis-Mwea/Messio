@@ -31,6 +31,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   @override
   Stream<ChatState> mapEventToState(ChatEvent event) async* {
+    print(event);
     if (event is FetchChatListEvent) {
       yield* mapFetchChatListEventToState(event);
     }

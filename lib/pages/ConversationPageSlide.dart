@@ -5,6 +5,7 @@ import 'package:messio/models/Chat.dart';
 import 'package:messio/models/Contact.dart';
 import 'package:messio/widgets/InputWidget.dart';
 import 'package:rubber/rubber.dart';
+
 import 'ConversationBottomSheet.dart';
 import 'ConversationPage.dart';
 
@@ -33,15 +34,16 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
   @override
   void initState() {
     chatBloc = BlocProvider.of<ChatBloc>(context);
-    //  chatBloc.dispatch(FetchChatListEvent());
     controller = RubberAnimationController(
       vsync: this,
     );
+    print('ChatList $chatList');
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    print('rtyuhfh');
     return SafeArea(
         child: Scaffold(
             key: _scaffoldKey,
