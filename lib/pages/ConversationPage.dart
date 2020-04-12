@@ -29,15 +29,20 @@ class _ConversationPageState extends State<ConversationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      Expanded(flex: 2, child: ChatAppBar()), // Custom app bar for chat screen
-      Expanded(
-        flex: 11,
-        child: Container(
+    return Stack(
+      children: <Widget>[
+        // Custom app bar for chat screen
+        Container(
           color: Palette.chatBackgroundColor,
-          child: ChatListWidget(),
+          child: Container(
+            child: ChatListWidget(),
+          ),
         ),
-      ),
-    ]);
+        SizedBox.fromSize(
+          size: Size.fromHeight(100.0),
+          child: ChatAppBar(),
+        )
+      ],
+    );
   }
 }

@@ -41,10 +41,9 @@ class _ChatAppBarState extends State<ChatAppBar> {
       },
       child: Material(
         child: Container(
-          decoration: new BoxDecoration(boxShadow: [
+          decoration: BoxDecoration(boxShadow: [
             //adds a shadow to the appbar
-            new BoxShadow(
-                color: Colors.grey, blurRadius: 2.0, spreadRadius: 0.1)
+            BoxShadow(color: Colors.grey, blurRadius: 2.0, spreadRadius: 0.1)
           ]),
           child: Container(
             padding: EdgeInsets.only(top: 10, bottom: 10),
@@ -62,38 +61,37 @@ class _ChatAppBarState extends State<ChatAppBar> {
                           flex: 7,
                           child: Container(
                             child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Expanded(
-                                  flex: 2,
-                                  child: Center(
-                                    child: IconButton(
-                                      icon: Icon(
-                                        Icons.attach_file,
-                                        color: Palette.secondaryColor,
-                                      ),
-                                      onPressed: () => {},
-                                    ),
-                                  ),
-                                ),
+                                    flex: 2,
+                                    child: Center(
+                                        child: IconButton(
+                                            icon: Icon(
+                                              Icons.attach_file,
+                                              color: Palette.secondaryColor,
+                                            ),
+                                            onPressed: () => {}))),
                                 Expanded(
                                   flex: 6,
                                   child: Container(
-                                      child: BlocBuilder<ChatBloc, ChatState>(
-                                    builder: (context, state) {
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          Text(name, style: Styles.textHeading),
-                                          Text(username, style: Styles.text)
-                                        ],
-                                      );
-                                    },
-                                  )),
+                                    child: BlocBuilder<ChatBloc, ChatState>(
+                                      builder: (context, state) {
+                                        return Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Text(name,
+                                                style: Styles.textHeading),
+                                            Text(username, style: Styles.text)
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -138,9 +136,13 @@ class _ChatAppBarState extends State<ChatAppBar> {
                   flex: 3,
                   child: Container(
                     child: Center(
-                      child: CircleAvatar(
-                        radius: 30,
-                        backgroundImage: image.image,
+                      child: BlocBuilder<ChatBloc, ChatState>(
+                        builder: (context, state) {
+                          return CircleAvatar(
+                            radius: 30,
+                            backgroundImage: image.image,
+                          );
+                        },
                       ),
                     ),
                   ),
