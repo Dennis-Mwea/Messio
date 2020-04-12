@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class User {
+class User{
   String uid;
   String documentId;
   String name;
@@ -8,27 +8,21 @@ class User {
   int age;
   String photoUrl;
 
-  User(
-      {this.uid,
-      this.documentId,
-      this.name,
-      this.username,
-      this.age,
-      this.photoUrl});
+  User({this.uid, this.documentId, this.name, this.username, this.age, this.photoUrl});
 
   factory User.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data;
-
     return User(
-        uid: data['uid'],
-        documentId: doc.documentID,
-        name: data['name'],
-        username: data['username'],
-        age: data['age'],
-        photoUrl: data['photoUrl']);
+      uid: data['uid'],
+      documentId: doc.documentID,
+      name: data['name'],
+      username: data['username'],
+      age: data['age'],
+      photoUrl: data['photoUrl']
+    );
   }
-
   @override
-  String toString() =>
-      '{ uid: $uid, documentId: $documentId, name: $name, age: $age, username: $username, photoUrl: $photoUrl }';
+  String toString() {
+   return '{ uid: $uid, documentId: $documentId, name: $name, age: $age, username: $username, photoUrl: $photoUrl }';
+  }
 }

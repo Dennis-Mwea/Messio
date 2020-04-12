@@ -17,7 +17,6 @@ class FetchContactsEvent extends ContactsEvent {
 class ReceivedContactsEvent extends ContactsEvent {
   final List<Contact> contacts;
   ReceivedContactsEvent(this.contacts) : super([contacts]);
-
   @override
   String toString() => 'ReceivedContactsEvent';
 }
@@ -26,13 +25,15 @@ class ReceivedContactsEvent extends ContactsEvent {
 class AddContactEvent extends ContactsEvent {
   final String username;
   AddContactEvent({@required this.username}) : super([username]);
-
   @override
   String toString() => 'AddContactEvent';
 }
 
 // CLicked a contact
 class ClickedContactEvent extends ContactsEvent {
+  final Contact contact;
+  ClickedContactEvent(this.contact) : super([contact]);
+
   @override
   String toString() => 'ClickedContactEvent';
 }

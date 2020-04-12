@@ -55,7 +55,9 @@ void main() {
 
       authenticationBloc.dispatch(AppLaunched());
     });
-    test('emits [Uninitialized -> ProfileUpdated] when user is logged in and profile is complete', () {
+    test(
+        'emits [Uninitialized -> ProfileUpdated] when user is logged in and profile is complete',
+        () {
       when(authenticationRepository.isLoggedIn())
           .thenAnswer((_) => Future.value(true));
       when(authenticationRepository.getCurrentUser())
@@ -71,7 +73,9 @@ void main() {
 
       authenticationBloc.dispatch(AppLaunched());
     });
-    test('emits [Uninitialized -> AuthInProgress -> Authenticated -> ProfileUpdateInProgress -> PreFillData] when user is logged in and profile is not complete', () {
+    test(
+        'emits [Uninitialized -> AuthInProgress -> Authenticated -> ProfileUpdateInProgress -> PreFillData] when user is logged in and profile is not complete',
+        () {
       when(authenticationRepository.isLoggedIn())
           .thenAnswer((_) => Future.value(true));
       when(authenticationRepository.getCurrentUser())
@@ -92,7 +96,9 @@ void main() {
   });
 
   group('ClickedGoogleLogin', () {
-    test('emits [AuthInProgress -> ProfileUpdated] when the user clicks Google Login button and after login result, the profile is complete', () {
+    test(
+        'emits [AuthInProgress -> ProfileUpdated] when the user clicks Google Login button and after login result, the profile is complete',
+        () {
       when(authenticationRepository.signInWithGoogle())
           .thenAnswer((_) => Future.value(firebaseUser));
       when(userDataRepository.isProfileComplete())
@@ -106,7 +112,9 @@ void main() {
       authenticationBloc.dispatch(ClickedGoogleLogin());
     });
 
-    test('emits [AuthInProgress -> Authenticated -> ProfileUpdateInProgress -> PreFillData] when the user clicks Google Login button and after login result, the profile is found to be incomplete', () {
+    test(
+        'emits [AuthInProgress -> Authenticated -> ProfileUpdateInProgress -> PreFillData] when the user clicks Google Login button and after login result, the profile is found to be incomplete',
+        () {
       when(authenticationRepository.signInWithGoogle())
           .thenAnswer((_) => Future.value(firebaseUser));
       when(userDataRepository.isProfileComplete())
@@ -124,7 +132,9 @@ void main() {
   });
 
   group('LoggedIn', () {
-    test('emits [ProfileUpdateInProgress -> PreFillData] when trigged, this event is trigged once gauth is done and profile is not complete', () {
+    test(
+        'emits [ProfileUpdateInProgress -> PreFillData] when trigged, this event is trigged once gauth is done and profile is not complete',
+        () {
       when(userDataRepository.saveDetailsFromGoogleAuth(firebaseUser))
           .thenAnswer((_) => Future.value(user));
       final expectedStates = [
@@ -147,8 +157,10 @@ void main() {
   });
 
   group('SaveProfile', () {
-    test('emits [ProfileUpdateInProgress -> ProfileUpdated] everytime SaveProfile is dispatched', () {
-      when(storageRepository.uploadImage(any, any))
+    test(
+        'emits [ProfileUpdateInProgress -> ProfileUpdated] everytime SaveProfile is dispatched',
+        () {
+      when(storageRepository.uploadFile(any, any))
           .thenAnswer((_) => Future.value(profilePictureUrl));
       when(authenticationRepository.getCurrentUser())
           .thenAnswer((_) => Future.value(firebaseUser));

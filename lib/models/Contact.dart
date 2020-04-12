@@ -9,18 +9,18 @@ class Contact {
 
   factory Contact.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data;
-
     return Contact(doc.documentID, data['username'], data['name']);
   }
 
   @override
-  String toString() =>
-      '{ documentId: $documentId, name: $name, username: $username}';
+  String toString() {
+    return '{ documentId: $documentId, name: $name, username: $username}';
+  }
 
   String getFirstName() => name.split(' ')[0];
 
-  String getLastName() {
+  String getLastName(){
     List names = name.split(' ');
-    return names.length > 1 ? names[1] : '';
+    return names.length>1?names[1]:'';
   }
 }

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:messio/models/User.dart';
@@ -10,51 +9,47 @@ abstract class AuthenticationState extends Equatable {
   AuthenticationState([List props = const <dynamic>[]]) : super(props);
 }
 
-class Uninitialized extends AuthenticationState {
+class Uninitialized extends AuthenticationState{
   @override
   String toString() => 'Uninitialized';
 }
 
-class AuthInProgress extends AuthenticationState {
+class AuthInProgress extends AuthenticationState{
   @override
   String toString() => 'AuthInProgress';
 }
 
-class Authenticated extends AuthenticationState {
+class Authenticated extends AuthenticationState{
   final FirebaseUser user;
   Authenticated(this.user);
-
   @override
   String toString() => 'Authenticated';
 }
 
-class PreFillData extends AuthenticationState {
+class PreFillData extends AuthenticationState{
   final User user;
   PreFillData(this.user);
-
   @override
   String toString() => 'PreFillData';
 }
 
-class UnAuthenticated extends AuthenticationState {
+class UnAuthenticated extends AuthenticationState{
   @override
   String toString() => 'UnAuthenticated';
 }
 
-class ReceivedProfilePicture extends AuthenticationState {
+class ReceivedProfilePicture extends AuthenticationState{
   final File file;
   ReceivedProfilePicture(this.file);
-
-  @override
-  String toString() => 'ReceivedProfilePicture';
+  @override toString() => 'ReceivedProfilePicture';
 }
 
-class ProfileUpdateInProgress extends AuthenticationState {
+class ProfileUpdateInProgress extends AuthenticationState{
   @override
   String toString() => 'ProfileUpdateInProgress';
 }
 
-class ProfileUpdated extends AuthenticationState {
+class ProfileUpdated extends AuthenticationState{
   @override
-  String toString() => 'ProfileUpdated';
+  String toString() => 'ProfileComplete';
 }

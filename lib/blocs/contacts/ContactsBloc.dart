@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:messio/repositories/UserDataRepository.dart';
 import 'package:messio/utils/Exceptions.dart';
 
-import './bloc.dart';
+import './Bloc.dart';
 
 class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   UserDataRepository userDataRepository;
@@ -18,8 +18,6 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   Stream<ContactsState> mapEventToState(
     ContactsEvent event,
   ) async* {
-    print(event);
-
     if (event is FetchContactsEvent) {
       try {
         yield FetchingContactsState();
@@ -46,7 +44,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
     }
 
     if (event is ClickedContactEvent) {
-      yield* mapClickedContactEventToState();
+      yield ClickedContactState(event.contact);
     }
   }
 
@@ -69,6 +67,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
       yield AddContactProgressState();
       await userDataRepository.addContact(username);
       yield AddContactSuccessState();
+      //dispatch(FetchContactsEvent());
     } on MessioException catch (exception) {
       print(exception.errorMessage());
       yield AddContactFailedState(exception);
@@ -76,7 +75,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   }
 
   Stream<ContactsState> mapClickedContactEventToState() async* {
-    // ToDo: Redirect to chat screen
+    // TODO: Redirect to chat screen
   }
 
   @override

@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
-import 'package:messio/config/Palette.dart';
+import 'package:flutter/material.dart';
+
+import 'Palette.dart';
 
 class Styles {
   static TextStyle textHeading = TextStyle(
@@ -19,7 +20,8 @@ class Styles {
       TextStyle(color: Palette.primaryTextColorLight, fontSize: 14);
   static TextStyle hintText = TextStyle(color: Palette.hintTextColor);
   static TextStyle hintTextLight = TextStyle(color: Palette.hintTextColorLight);
-  static TextStyle text = TextStyle(color: Palette.secondaryTextColor);
+  static TextStyle text =
+      TextStyle(fontSize: 12.0, color: Palette.secondaryTextColor);
   static TextStyle textLight =
       TextStyle(color: Palette.secondaryTextColorLight);
   static TextStyle subText = TextStyle(color: Palette.greyColor);

@@ -7,18 +7,18 @@ class StorageProvider extends BaseStorageProvider {
   final FirebaseStorage firebaseStorage;
   StorageProvider({FirebaseStorage firebaseStorage})
       : firebaseStorage = firebaseStorage ?? FirebaseStorage.instance;
-
   @override
-  Future<String> uploadImage(File file, String path) async {
+  Future<String> uploadFile(File file, String path) async {
     StorageReference reference = firebaseStorage
         .ref()
-        .child(path); // Get a reference to th path of the image directory
+        .child(path); // get a reference to the path of the image directory
     StorageUploadTask uploadTask =
-        reference.putFile(file); // puth the file in the path
+        reference.putFile(file); // put the file in the path
     StorageTaskSnapshot result =
         await uploadTask.onComplete; // wait for the upload to complete
+    String url = await result.ref
+        .getDownloadURL(); //retrieve the download link and return it
 
-    return await result.ref
-        .getDownloadURL(); // retrieve the download and return it
+    return url;
   }
 }
