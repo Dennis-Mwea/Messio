@@ -29,7 +29,6 @@ class ChatProvider extends BaseChatProvider {
   }
 
   void mapDocumentToChat(DocumentSnapshot snapshot, EventSink sink) async {
-    print(snapshot.data);
     List<Chat> chats = List();
     Map data = snapshot.data['chats'];
     if (data != null) {
@@ -53,8 +52,6 @@ class ChatProvider extends BaseChatProvider {
   }
 
   void mapDocumentToMessage(QuerySnapshot querySnapshot, EventSink sink) async {
-    print('hereeeeeeeeeeeeeeeeee');
-    print(querySnapshot);
     List<Message> messages = List();
     for (DocumentSnapshot document in querySnapshot.documents) {
       print(document.data);
@@ -94,7 +91,7 @@ class ChatProvider extends BaseChatProvider {
 
   @override
   Future<void> createChatIdForContact(User user) async {
-    String contactUid = user.uid;
+    String contactUid = user.documentId;
     String contactUsername = user.username;
     String uid = SharedObjects.prefs.getString(Constants.sessionUid);
     String selfUsername =

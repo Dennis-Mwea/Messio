@@ -39,8 +39,6 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
     }
 
     if (event is ReceivedContactsEvent) {
-      print('Received');
-      //  yield FetchingContactsState();
       yield FetchedContactsState(event.contacts);
     }
 

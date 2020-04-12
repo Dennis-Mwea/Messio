@@ -4,13 +4,11 @@ import 'package:messio/blocs/authentication/Bloc.dart';
 import 'package:messio/blocs/chats/Bloc.dart';
 import 'package:messio/blocs/contacts/Bloc.dart';
 import 'package:messio/pages/ContactListPage.dart';
-import 'package:messio/pages/ConversationPageSlide.dart';
 import 'package:messio/repositories/AuthenticationRepository.dart';
 import 'package:messio/repositories/ChatRepository.dart';
 import 'package:messio/repositories/StorageRepository.dart';
 import 'package:messio/repositories/UserDataRepository.dart';
 import 'package:messio/utils/SharedObjects.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'config/Palette.dart';
 import 'pages/RegisterPage.dart';
@@ -44,7 +42,7 @@ void main() async {
           userDataRepository: userDataRepository,
           storageRepository: storageRepository,
           chatRepository: chatRepository,
-        )..dispatch(FetchChatListEvent()),
+        ),
       )
     ],
     child: Messio(),
@@ -64,7 +62,7 @@ class Messio extends StatelessWidget {
           if (state is UnAuthenticated) {
             return RegisterPage();
           } else if (state is ProfileUpdated) {
-            // TODO: return home here
+            BlocProvider.of<ChatBloc>(context).dispatch(FetchChatListEvent());
             return ContactListPage();
           } else {
             return RegisterPage();

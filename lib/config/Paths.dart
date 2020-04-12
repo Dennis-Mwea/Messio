@@ -9,5 +9,5 @@ class Paths {
   static const String usernameUidMapPath = '/username_uid_map';
   static const String chatsPath = "/chats";
   static const String chat_messages = "/chat_messages";
-  static const String messagesPath = "/messages";
+  static const String messagesPath = "messages";
 }
