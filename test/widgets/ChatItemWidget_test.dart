@@ -1,7 +1,8 @@
-void main() {
+
+void main(){
 //  const MaterialApp app = MaterialApp(
 //    home: Scaffold(
-//        body:  const ChatItemWidget(0)
+//        body:  const ChatItemWidget()
 //    ),
 //  );
 //  testWidgets('ChatItemWidget UI Test', (WidgetTester tester) async {

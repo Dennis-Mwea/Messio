@@ -28,7 +28,6 @@ class UserDataProvider extends BaseUserDataProvider {
       'email': user.email,
       'name': user.displayName,
     };
-
     if (!userExists) {
       // if user entry exists then we would not want to override the photo url with the one received from googel auth
       data['photoUrl'] = user.photoUrl;
@@ -37,7 +36,6 @@ class UserDataProvider extends BaseUserDataProvider {
     final DocumentSnapshot currentDocument =
         await ref.get(); // get updated data reference
     SharedObjects.prefs.setString(Constants.sessionUsername, user.displayName);
-
     return User.fromFirestore(
         currentDocument); // create a user object and return
   }
@@ -75,19 +73,16 @@ class UserDataProvider extends BaseUserDataProvider {
             Constants.sessionUid)); // get reference to the user/ uid node
     final DocumentSnapshot currentDocument = await ref.get();
     final bool isProfileComplete = currentDocument != null &&
-        currentDocument != null &&
         currentDocument.exists &&
         currentDocument.data.containsKey('username') &&
         currentDocument.data.containsKey(
-            'age'); // check if it exists, if// yes then check if username and age field are there or not. If not then profile incomplete else complete
-
+            'age'); // check if it exists, if yes then check if username and age field are there or not. If not then profile incomplete else complete
     if (isProfileComplete) {
       SharedObjects.prefs.setString(
           Constants.sessionUsername, currentDocument.data['username']);
       SharedObjects.prefs
           .setString(Constants.sessionName, currentDocument.data['name']);
     }
-
     return isProfileComplete;
   }
 
@@ -96,7 +91,6 @@ class UserDataProvider extends BaseUserDataProvider {
     CollectionReference userRef = fireStoreDb.collection(Paths.usersPath);
     DocumentReference ref =
         userRef.document(SharedObjects.prefs.getString(Constants.sessionUid));
-
     return ref.snapshots().transform(
         StreamTransformer<DocumentSnapshot, List<Contact>>.fromHandlers(
             handleData: (documentSnapshot, sink) =>
@@ -106,7 +100,6 @@ class UserDataProvider extends BaseUserDataProvider {
   void mapDocumentToContact(CollectionReference userRef, DocumentReference ref,
       DocumentSnapshot documentSnapshot, Sink sink) async {
     List<String> contacts;
-
     if (documentSnapshot.data['contacts'] == null) {
       ref.updateData({'contacts': []});
       contacts = List();
@@ -119,38 +112,36 @@ class UserDataProvider extends BaseUserDataProvider {
       DocumentSnapshot contactSnapshot = await userRef.document(uid).get();
       contactList.add(Contact.fromFirestore(contactSnapshot));
     }
-    print(contactList);
     sink.add(contactList);
   }
 
   @override
   Future<void> addContact(String username) async {
     User contactUser = await getUser(username);
+    //create a node with the username provided in the contacts collection
     CollectionReference collectionReference =
         fireStoreDb.collection(Paths.usersPath);
-    //create a node with the username provided in the contacts collection
     DocumentReference ref = collectionReference
         .document(SharedObjects.prefs.getString(Constants.sessionUid));
+
+
     //await to fetch user details of the username provided and set data
     final documentSnapshot = await ref.get();
     List<String> contacts = documentSnapshot.data['contacts'] != null
         ? List.from(documentSnapshot.data['contacts'])
         : List();
     if (contacts.contains(username)) {
-      print('contact exists');
       throw ContactAlreadyExistsException();
     }
+    //add contact
     contacts.add(username);
-    await ref.updateData({'contacts': contacts});
-
+    await ref.setData({'contacts': contacts}, merge: true);
     //contact should be added in the contactlist of both the users. Adding to the second user here
-    String sessionUsername =
-        SharedObjects.prefs.getString(Constants.sessionUsername);
-    DocumentReference contactRef =
-        collectionReference.document(contactUser.documentId);
-    final contactSnapShot = await contactRef.get();
-    contacts = contactSnapShot.data['contacts'] != null
-        ? List.from(contactSnapShot.data['contacts'])
+    String sessionUsername = SharedObjects.prefs.getString(Constants.sessionUsername);
+    DocumentReference contactRef = collectionReference.document(contactUser.documentId);
+    final  contactSnapshot = await contactRef.get();
+    contacts = contactSnapshot.data['contacts'] != null
+        ? List.from(contactSnapshot.data['contacts'])
         : List();
     if (contacts.contains(sessionUsername)) {
       throw ContactAlreadyExistsException();

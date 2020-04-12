@@ -11,25 +11,28 @@ class ChatListWidget extends StatefulWidget {
 }
 
 class _ChatListWidgetState extends State<ChatListWidget> {
-  final ScrollController listScrollController = new ScrollController();
+  final ScrollController listScrollController =  ScrollController();
   List<Message> messages = List();
-
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      builder: (context, state) {
-        if (state is FetchedMessagesState) {
-          messages = state.messages;
+    // TODO: implement build
+    return BlocBuilder<ChatBloc,ChatState>(
+        builder: (context, state) {
+          print('chatlist');
+          print(state);
+          if(state is FetchedMessagesState){
+            messages = state.messages;
+            print(state.messages);
+          }
+          return ListView.builder(
+            padding: EdgeInsets.all(10.0),
+            itemBuilder: (context, index) => ChatItemWidget(messages[index]),
+            itemCount: messages.length,
+            reverse: true,
+            controller: listScrollController,
+          );
         }
-
-        return ListView.builder(
-          padding: EdgeInsets.all(10.0),
-          itemBuilder: (context, index) => ChatItemWidget(messages[index]),
-          itemCount: messages.length,
-          reverse: true,
-          controller: listScrollController,
-        );
-      },
     );
   }
 }
+

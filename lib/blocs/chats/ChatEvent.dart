@@ -11,13 +11,13 @@ abstract class ChatEvent extends Equatable {
   ChatEvent([List props = const <dynamic>[]]) : super(props);
 }
 
-// Triggered to fetch list of chats
+//triggered to fetch list of chats
 class FetchChatListEvent extends ChatEvent {
   @override
   String toString() => 'FetchChatListEvent';
 }
 
-// triggered when stream containing list of chats has new data
+//triggered when stream containing list of chats has new data
 class ReceivedChatsEvent extends ChatEvent {
   final List<Chat> chatList;
   ReceivedChatsEvent(this.chatList);
@@ -47,7 +47,7 @@ class FetchMessagesEvent extends ChatEvent {
 //triggered when messages stream has new data
 class ReceivedMessagesEvent extends ChatEvent {
   final List<Message> messages;
-  ReceivedMessagesEvent(this.messages) : super(messages);
+  ReceivedMessagesEvent(this.messages) : super([messages]);
 
   @override
   String toString() => 'ReceivedMessagesEvent';
@@ -62,6 +62,7 @@ class SendTextMessageEvent extends ChatEvent {
   String toString() => 'SendTextMessageEvent';
 }
 
+//triggered to send attachment
 class SendAttachmentEvent extends ChatEvent {
   final String chatId;
   final File file;

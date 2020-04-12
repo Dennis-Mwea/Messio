@@ -78,12 +78,8 @@ class _ContactListPageState extends State<ContactListPage>
                       behavior: SnackBarBehavior.floating,
                       content: Text(state.exception.errorMessage()));
                   Scaffold.of(bc).showSnackBar(snackBar);
-                } else if (state is ClickedContactState) {
-                  Navigator.push(
-                      context,
-                      SlideLeftRoute(
-                          page: ConversationPageSlide(
-                              startContact: state.contact)));
+                }else if (state is ClickedContactState){
+                  Navigator.push(context,SlideLeftRoute(page: ConversationPageSlide(startContact: state.contact)));
                 }
               },
               child: Stack(
@@ -162,65 +158,65 @@ class _ContactListPageState extends State<ContactListPage>
         context: context,
         builder: (BuildContext bc) {
           return BlocBuilder<ContactsBloc, ContactsState>(
-              builder: (context, state) {
-            return Container(
-              color: Color(0xFF737373),
-              // This line set the transparent background
-              child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(40.0),
-                          topRight: Radius.circular(40.0))),
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                            padding: EdgeInsets.only(left: 20, right: 20),
-                            child: Image.asset(Assets.social)),
-                        Container(
-                          margin: EdgeInsets.only(top: 40),
-                          child: Text(
-                            'Add by Username',
-                            style: Styles.textHeading,
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(50, 20, 50, 20),
-                          child: TextField(
-                            controller: usernameController,
-                            textAlign: TextAlign.center,
-                            style: Styles.subHeading,
-                            decoration: Decorations.getInputDecoration(
-                                hint: '@username', isPrimary: true),
-                          ),
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Container(
-                              child: BlocBuilder<ContactsBloc, ContactsState>(
-                                  builder: (context, state) {
-                                return GradientFab(
-                                  elevation: 0.0,
-                                  child: getButtonChild(state),
-                                  onPressed: () {
-                                    contactsBloc.dispatch(AddContactEvent(
-                                        username: usernameController.text));
-                                  },
-                                );
-                              }),
+              builder: (context,state){
+             return Container(
+                color: Color(0xFF737373),
+                // This line set the transparent background
+                child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(40.0),
+                            topRight: Radius.circular(40.0))),
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Padding(
+                              padding: EdgeInsets.only(left: 20, right: 20),
+                              child: Image.asset(Assets.social)),
+                          Container(
+                            margin: EdgeInsets.only(top: 40),
+                            child: Text(
+                              'Add by Username',
+                              style: Styles.textHeading,
                             ),
-                          ],
-                        )
-                      ],
-                    ),
-                  )),
-            );
-          });
+                          ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(50, 20, 50, 20),
+                            child: TextField(
+                              controller: usernameController,
+                              textAlign: TextAlign.center,
+                              style: Styles.subHeading,
+                              decoration: Decorations.getInputDecoration(
+                                  hint: '@username', isPrimary: true),
+                            ),
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Container(
+                                child: BlocBuilder<ContactsBloc, ContactsState>(
+                                    builder: (context, state) {
+                                  return GradientFab(
+                                    elevation: 0.0,
+                                    child: getButtonChild(state),
+                                    onPressed: () {
+                                      contactsBloc.dispatch(AddContactEvent(
+                                          username: usernameController.text));
+                                    },
+                                  );
+                                }),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    )),
+              );
+              });
         });
   }
 

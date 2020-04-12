@@ -2,8 +2,7 @@ import 'dart:io';
 
 import 'package:messio/providers/StorageProvider.dart';
 
-class StorageRepository {
+class StorageRepository{
   StorageProvider storageProvider = StorageProvider();
-  Future<String> uploadFile(File file, String path) =>
-      storageProvider.uploadFile(file, path);
+  Future<String> uploadFile(File file, String path) => storageProvider.uploadFile(file, path);
 }

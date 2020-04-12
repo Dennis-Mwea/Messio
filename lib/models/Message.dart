@@ -10,10 +10,9 @@ abstract class Message {
 
   Message(this.timeStamp, this.senderName, this.senderUsername);
 
-  factory Message.fromFirestore(DocumentSnapshot doc) {
+  factory Message.fromFireStore(DocumentSnapshot doc) {
     final int type = doc.data['type'];
     Message message;
-
     switch (type) {
       case 0:
         message = TextMessage.fromFirestore(doc);
@@ -26,11 +25,9 @@ abstract class Message {
         break;
       case 3:
         message = FileMessage.fromFirestore(doc);
-        break;
     }
     message.isSelf = SharedObjects.prefs.getString(Constants.sessionUsername) ==
         message.senderUsername;
-
     return message;
   }
 
@@ -45,7 +42,6 @@ class TextMessage extends Message {
 
   factory TextMessage.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data;
-
     return TextMessage(data['text'], data['timeStamp'], data['senderName'],
         data['senderUsername']);
   }
@@ -58,7 +54,6 @@ class TextMessage extends Message {
     map['senderName'] = senderName;
     map['senderUsername'] = senderUsername;
     map['type'] = 0;
-
     return map;
   }
 }

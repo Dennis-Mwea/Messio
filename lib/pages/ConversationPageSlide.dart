@@ -3,11 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messio/blocs/chats/Bloc.dart';
 import 'package:messio/models/Chat.dart';
 import 'package:messio/models/Contact.dart';
-import 'package:messio/pages/ConversationPage.dart';
 import 'package:messio/widgets/InputWidget.dart';
 import 'package:rubber/rubber.dart';
-
 import 'ConversationBottomSheet.dart';
+import 'ConversationPage.dart';
 
 class ConversationPageSlide extends StatefulWidget {
   final Contact startContact;
@@ -28,11 +27,13 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
   ChatBloc chatBloc;
   List<Chat> chatList = List();
   bool isFirstLaunch = true;
+
   _ConversationPageSlideState(this.startContact);
 
   @override
   void initState() {
     chatBloc = BlocProvider.of<ChatBloc>(context);
+    //  chatBloc.dispatch(FetchChatListEvent());
     controller = RubberAnimationController(
       vsync: this,
     );
@@ -46,39 +47,35 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
             key: _scaffoldKey,
             body: Column(
               children: <Widget>[
-                BlocListener(
-                  bloc: chatBloc,
-                  listener: (buildContext, state) {
-                    print('ChatList $chatList');
-                    if (isFirstLaunch && chatList.isNotEmpty) {
-                      isFirstLaunch = false;
-                      for (int i = 0; i < chatList.length; i++) {
-                        if (startContact.username == chatList[i].username) {
-                          BlocProvider.of<ChatBloc>(context)
-                              .dispatch(PageChangedEvent(i, chatList[i]));
-                          pageController.jumpToPage(i);
+                BlocListener<ChatBloc, ChatState>(
+                    bloc: chatBloc,
+                    listener: (bc, state) {
+                      print('ChatList $chatList');
+                      if (isFirstLaunch && chatList.isNotEmpty) {
+                        isFirstLaunch = false;
+                        for (int i = 0; i < chatList.length; i++) {
+                          if (startContact.username == chatList[i].username) {
+                            BlocProvider.of<ChatBloc>(context)
+                                .dispatch(PageChangedEvent(i, chatList[i]));
+                            pageController.jumpToPage(i);
+                          }
                         }
                       }
-                    }
-                  },
-                  child: Expanded(
-                    child: BlocBuilder<ChatBloc, ChatState>(
+                    },
+                    child: Expanded(child: BlocBuilder<ChatBloc, ChatState>(
                       builder: (context, state) {
                         if (state is FetchedChatListState)
                           chatList = state.chatList;
                         return PageView.builder(
-                          itemCount: chatList.length,
-                          controller: pageController,
-                          onPageChanged: (index) =>
-                              BlocProvider.of<ChatBloc>(context).dispatch(
-                                  PageChangedEvent(index, chatList[index])),
-                          itemBuilder: (buildContext, index) =>
-                              ConversationPage(chatList[index]),
-                        );
+                            controller: pageController,
+                            itemCount: chatList.length,
+                            onPageChanged: (index) =>
+                                BlocProvider.of<ChatBloc>(context).dispatch(
+                                    PageChangedEvent(index, chatList[index])),
+                            itemBuilder: (bc, index) =>
+                                ConversationPage(chatList[index]));
                       },
-                    ),
-                  ),
-                ),
+                    ))),
                 Container(
                     child: GestureDetector(
                         child: InputWidget(),

@@ -12,17 +12,15 @@ class InitialContactsState extends ContactsState {
   @override
   String toString() => 'InitialContactsState';
 }
-
 //Fetching contacts from firebase
-class FetchingContactsState extends ContactsState {
+class FetchingContactsState extends ContactsState{
   @override
   String toString() => 'FetchingContactsState';
 }
-
 //contacts fetched successfully
 class FetchedContactsState extends ContactsState {
   final List<Contact> contacts;
-  FetchedContactsState(this.contacts) : super([contacts]);
+  FetchedContactsState(this.contacts): super([contacts]);
   @override
   String toString() => 'FetchedContactsState';
 }
@@ -42,7 +40,7 @@ class AddContactSuccessState extends ContactsState {
 // Add contact failed
 class AddContactFailedState extends ContactsState {
   final MessioException exception;
-  AddContactFailedState(this.exception) : super([exception]);
+  AddContactFailedState(this.exception): super([exception]);
   @override
   String toString() => 'AddContactFailedState';
 }
@@ -50,8 +48,8 @@ class AddContactFailedState extends ContactsState {
 // Clicked a contact item
 class ClickedContactState extends ContactsState {
   final Contact contact;
-  ClickedContactState(this.contact) : super([contact]);
 
+  ClickedContactState(this.contact):super([contact]);
   @override
   String toString() => 'ClickedContactState';
 }
@@ -59,7 +57,7 @@ class ClickedContactState extends ContactsState {
 // Handle errors
 class ErrorState extends ContactsState {
   final MessioException exception;
-  ErrorState(this.exception) : super([exception]);
+  ErrorState(this.exception): super([exception]);
   @override
   String toString() => 'ErrorState';
 }
