@@ -1,6 +1,9 @@
 import 'package:file_picker/file_picker.dart';
 
 class Paths {
+  /*
+  Firebase paths
+   */
   static const String profilePicturePath = 'profile_pictures';
   static const String imageAttachmentsPath = 'images';
   static const String videoAttachmentsPath = 'videos';
@@ -13,12 +16,11 @@ class Paths {
   static const String messagesPath = 'messages';
 
   static String getAttachmentPathByFileType(FileType fileType) {
-    if (fileType == FileType.image) {
+    if (fileType == FileType.image)
       return imageAttachmentsPath;
-    } else if (fileType == FileType.video) {
+    else if (fileType == FileType.video)
       return videoAttachmentsPath;
-    } else {
+    else
       return fileAttachmentsPath;
-    }
   }
 }

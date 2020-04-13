@@ -3,23 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messio/blocs/chats/Bloc.dart';
 import 'package:messio/config/Palette.dart';
-
 class InputWidget extends StatefulWidget {
   @override
   _InputWidgetState createState() => _InputWidgetState();
 }
 
-class _InputWidgetState extends State<InputWidget> {
+class _InputWidgetState extends State<InputWidget>{
+  final TextEditingController textEditingController = TextEditingController();
   ChatBloc chatBloc;
   bool showEmojiKeyboard = false;
-  final TextEditingController textEditingController = TextEditingController();
-
   @override
   void initState() {
-    chatBloc = BlocProvider.of<ChatBloc>(context);
+    chatBloc =  BlocProvider.of<ChatBloc>(context);
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -35,8 +32,7 @@ class _InputWidgetState extends State<InputWidget> {
                       child: IconButton(
                         icon: Icon(Icons.face),
                         color: Palette.accentColor,
-                        onPressed: () => chatBloc.dispatch(
-                            ToggleEmojiKeyboardEvent(!showEmojiKeyboard)),
+                        onPressed: () =>chatBloc.dispatch(ToggleEmojiKeyboardEvent(!showEmojiKeyboard)),
                       ),
                     ),
                     color: Colors.white,
@@ -46,7 +42,7 @@ class _InputWidgetState extends State<InputWidget> {
                   Flexible(
                     child: Material(
                         child: Container(
-                      color: Palette.primaryBackgroundColor,
+                          color: Palette.primaryBackgroundColor,
                       child: TextField(
                         style: TextStyle(
                             color: Palette.primaryTextColor, fontSize: 15.0),
@@ -87,8 +83,7 @@ class _InputWidgetState extends State<InputWidget> {
                   bgColor: Palette.primaryBackgroundColor,
                   indicatorColor: Palette.accentColor,
                   onEmojiSelected: (emoji, category) {
-                    textEditingController.text =
-                        textEditingController.text + emoji.emoji;
+                    textEditingController.text = textEditingController.text+ emoji.emoji;
                   },
                 );
               })
@@ -103,7 +98,7 @@ class _InputWidgetState extends State<InputWidget> {
   }
 
   void sendMessage(context) {
-    chatBloc.dispatch(SendTextMessageEvent(textEditingController.text));
+       chatBloc.dispatch(SendTextMessageEvent(textEditingController.text));
     textEditingController.clear();
   }
 }

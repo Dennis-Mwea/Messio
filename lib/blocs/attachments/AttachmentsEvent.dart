@@ -6,13 +6,11 @@ import 'package:meta/meta.dart';
 abstract class AttachmentsEvent extends Equatable {
   AttachmentsEvent([List props = const <dynamic>[]]) : super(props);
 }
-
-class FetchAttachmentsEvent extends AttachmentsEvent {
+class FetchAttachmentsEvent extends AttachmentsEvent{
   final FileType fileType;
   final String chatId;
-  FetchAttachmentsEvent(this.chatId, this.fileType) : super([chatId, fileType]);
+  FetchAttachmentsEvent(this.chatId,this.fileType): super([chatId,fileType]);
 
   @override
-  String toString() =>
-      'FetchAttachmentsEvent {chatId: $chatId, fileTyle $fileType}';
+  String toString() => 'FetchAttachmentsEvent { chatId : $chatId fileType : $fileType }';
 }

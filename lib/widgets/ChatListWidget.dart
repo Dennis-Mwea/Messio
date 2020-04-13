@@ -8,6 +8,7 @@ import 'ChatItemWidget.dart';
 
 class ChatListWidget extends StatefulWidget {
   final Chat chat;
+
   ChatListWidget(this.chat);
 
   @override
@@ -18,6 +19,7 @@ class _ChatListWidgetState extends State<ChatListWidget> {
   final ScrollController listScrollController = ScrollController();
   List<Message> messages = List();
   final Chat chat;
+
   _ChatListWidgetState(this.chat);
 
   @override
@@ -26,38 +28,35 @@ class _ChatListWidgetState extends State<ChatListWidget> {
     listScrollController.addListener(() {
       double maxScroll = listScrollController.position.maxScrollExtent;
       double currentScroll = listScrollController.position.pixels;
-
       if (maxScroll == currentScroll) {
         BlocProvider.of<ChatBloc>(context)
-            .dispatch(FetchPreviousMessagesEvent(this.chat, messages.last));
+            .dispatch(FetchPreviousMessagesEvent(this.chat,messages.last));
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatBloc, ChatState>(
-      builder: (context, state) {
-        print('chatlist');
-        print(state);
-        if (state is FetchedMessagesState) {
-          if (state.username == chat.username) {
-            if (state.isPrevious) {
-              messages.addAll(state.messages);
-            } else {
-              messages = state.messages;
-            }
-          }
+    // TODO: implement build
+    return BlocBuilder<ChatBloc, ChatState>(builder: (context, state) {
+      print(state);
+      if (state is FetchedMessagesState) {
+        print('Received Messages');
+        if (state.username == chat.username) {
+          print(state.messages);
+          if (state.isPrevious)
+            messages.addAll(state.messages);
+          else
+            messages = state.messages;
         }
-
-        return ListView.builder(
-          padding: EdgeInsets.all(10.0),
-          itemBuilder: (context, index) => ChatItemWidget(messages[index]),
-          itemCount: messages.length,
-          reverse: true,
-          controller: listScrollController,
-        );
-      },
-    );
+      }
+      return ListView.builder(
+        padding: EdgeInsets.all(10.0),
+        itemBuilder: (context, index) => ChatItemWidget(messages[index]),
+        itemCount: messages.length,
+        reverse: true,
+        controller: listScrollController,
+      );
+    });
   }
 }

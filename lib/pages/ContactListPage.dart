@@ -64,21 +64,14 @@ class _ContactListPageState extends State<ContactListPage>
                 print(state);
                 if (state is AddContactSuccessState) {
                   Navigator.pop(context);
-                  GradientSnackBar.showMessage(
-                      context, 'Contact Added Successfully!');
+                  GradientSnackBar.showMessage(context, "Contact Added Successfully!");
                 } else if (state is ErrorState) {
-                  GradientSnackBar.showError(
-                      context, state.exception.errorMessage());
+                 GradientSnackBar.showError(context, state.exception.errorMessage());
                 } else if (state is AddContactFailedState) {
                   Navigator.pop(context);
-                  GradientSnackBar.showError(
-                      context, state.exception.errorMessage());
-                } else if (state is ClickedContactState) {
-                  Navigator.push(
-                      context,
-                      SlideLeftRoute(
-                          page: ConversationPageSlide(
-                              startContact: state.contact)));
+                  GradientSnackBar.showError(context, state.exception.errorMessage());
+                }else if (state is ClickedContactState){
+                  Navigator.push(context,SlideLeftRoute(page: ConversationPageSlide(startContact: state.contact)));
                 }
               },
               child: Stack(
@@ -101,10 +94,10 @@ class _ContactListPageState extends State<ContactListPage>
                             builder: (context, state) {
                           if (state is FetchingContactsState) {
                             return SliverToBoxAdapter(
-                              child: Container(
-                                  margin: EdgeInsets.only(top: 20),
-                                  child: Center(
-                                      child: CircularProgressIndicator())),
+                              child: SizedBox(
+                                height: (MediaQuery.of(context).size.height),
+                                child: Center(child: CircularProgressIndicator()),
+                              ),
                             );
                           }
 
@@ -157,65 +150,65 @@ class _ContactListPageState extends State<ContactListPage>
         context: context,
         builder: (BuildContext bc) {
           return BlocBuilder<ContactsBloc, ContactsState>(
-              builder: (context, state) {
-            return Container(
-              color: Color(0xFF737373),
-              // This line set the transparent background
-              child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(40.0),
-                          topRight: Radius.circular(40.0))),
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                            padding: EdgeInsets.only(left: 20, right: 20),
-                            child: Image.asset(Assets.social)),
-                        Container(
-                          margin: EdgeInsets.only(top: 40),
-                          child: Text(
-                            'Add by Username',
-                            style: Styles.textHeading,
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(50, 20, 50, 20),
-                          child: TextField(
-                            controller: usernameController,
-                            textAlign: TextAlign.center,
-                            style: Styles.subHeading,
-                            decoration: Decorations.getInputDecoration(
-                                hint: '@username', isPrimary: true),
-                          ),
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Container(
-                              child: BlocBuilder<ContactsBloc, ContactsState>(
-                                  builder: (context, state) {
-                                return GradientFab(
-                                  elevation: 0.0,
-                                  child: getButtonChild(state),
-                                  onPressed: () {
-                                    contactsBloc.dispatch(AddContactEvent(
-                                        username: usernameController.text));
-                                  },
-                                );
-                              }),
+              builder: (context,state){
+             return Container(
+                color: Color(0xFF737373),
+                // This line set the transparent background
+                child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(40.0),
+                            topRight: Radius.circular(40.0))),
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Padding(
+                              padding: EdgeInsets.only(left: 20, right: 20),
+                              child: Container(constraints: BoxConstraints(minHeight: 100),child: Image.asset(Assets.social))),
+                          Container(
+                            margin: EdgeInsets.only(top: 40),
+                            child: Text(
+                              'Add by Username',
+                              style: Styles.textHeading,
                             ),
-                          ],
-                        )
-                      ],
-                    ),
-                  )),
-            );
-          });
+                          ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(50, 20, 50, 20),
+                            child: TextField(
+                              controller: usernameController,
+                              textAlign: TextAlign.center,
+                              style: Styles.subHeading,
+                              decoration: Decorations.getInputDecoration(
+                                  hint: '@username', isPrimary: true),
+                            ),
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Container(
+                                child: BlocBuilder<ContactsBloc, ContactsState>(
+                                    builder: (context, state) {
+                                  return GradientFab(
+                                    elevation: 0.0,
+                                    child: getButtonChild(state),
+                                    onPressed: () {
+                                      contactsBloc.dispatch(AddContactEvent(
+                                          username: usernameController.text));
+                                    },
+                                  );
+                                }),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    )),
+              );
+              });
         });
   }
 

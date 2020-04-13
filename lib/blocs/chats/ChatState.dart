@@ -13,26 +13,31 @@ class InitialChatState extends ChatState {}
 
 class FetchedChatListState extends ChatState {
   final List<Chat> chatList;
+
   FetchedChatListState(this.chatList) : super([chatList]);
 
   @override
   String toString() => 'FetchedChatListState';
 }
+class FetchingMessageState extends ChatState{
+  @override
+  String toString() => 'FetchingMessageState';
+}
+
 
 class FetchedMessagesState extends ChatState {
   final List<Message> messages;
   final String username;
-  final bool isPrevious;
-  FetchedMessagesState(this.messages, this.username, {this.isPrevious})
-      : super([messages, username, isPrevious]);
+  final isPrevious;
+  FetchedMessagesState(this.messages,this.username, {this.isPrevious}) : super([messages,username,isPrevious]);
 
   @override
-  String toString() =>
-      'FetchedMessagesState {messages: ${messages.length}, username: $username, isPrevious: $isPrevious}';
+  String toString() => 'FetchedMessagesState {messages: ${messages.length}, username: $username, isPrevious: $isPrevious}';
 }
 
 class ErrorState extends ChatState {
   final Exception exception;
+
   ErrorState(this.exception) : super([exception]);
 
   @override
@@ -42,8 +47,7 @@ class ErrorState extends ChatState {
 class FetchedContactDetailsState extends ChatState {
   final User user;
   final String username;
-  FetchedContactDetailsState(this.user, this.username)
-      : super([user, username]);
+  FetchedContactDetailsState(this.user,this.username) : super([user,username]);
 
   @override
   String toString() => 'FetchedContactDetailsState';
@@ -58,9 +62,10 @@ class PageChangedState extends ChatState {
   String toString() => 'PageChangedState';
 }
 
-class ToggleEmojiKeyboardState extends ChatState {
+class ToggleEmojiKeyboardState extends ChatState{
   final bool showEmojiKeyboard;
-  ToggleEmojiKeyboardState(this.showEmojiKeyboard) : super([showEmojiKeyboard]);
+
+  ToggleEmojiKeyboardState(this.showEmojiKeyboard): super([showEmojiKeyboard]);
 
   @override
   String toString() => 'ToggleEmojiKeyboardState';

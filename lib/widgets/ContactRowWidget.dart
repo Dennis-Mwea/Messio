@@ -13,13 +13,9 @@ class ContactRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Navigator.push(
-          context,
-          SlideLeftRoute(
-              page: ConversationPageSlide(
-            startContact: contact,
-          ))),
+    return InkWell(
+      onTap: () =>
+          Navigator.push(context,SlideLeftRoute(page: ConversationPageSlide(startContact: contact))),
       child: Container(
           color: Palette.primaryColor,
           child: Padding(

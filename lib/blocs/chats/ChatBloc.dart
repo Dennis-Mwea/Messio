@@ -33,50 +33,42 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ChatState get initialState => InitialChatState();
 
   @override
-  Stream<ChatState> mapEventToState(ChatEvent event) async* {
+  Stream<ChatState> mapEventToState(
+    ChatEvent event,
+  ) async* {
     print(event);
     if (event is FetchChatListEvent) {
       yield* mapFetchChatListEventToState(event);
     }
-
     if (event is ReceivedChatsEvent) {
       yield FetchedChatListState(event.chatList);
     }
-
     if (event is PageChangedEvent) {
       activeChatId = event.activeChat.chatId;
       yield PageChangedState(event.index, event.activeChat);
     }
-
     if (event is FetchConversationDetailsEvent) {
-      dispatch(FetchMessagesEvent(event.chat));
       yield* mapFetchConversationDetailsEventToState(event);
     }
-
     if (event is FetchMessagesEvent) {
       yield* mapFetchMessagesEventToState(event);
     }
-
     if (event is FetchPreviousMessagesEvent) {
       yield* mapFetchPreviousMessagesEventToState(event);
     }
-
     if (event is ReceivedMessagesEvent) {
+      print('dispatching received messages');
       yield FetchedMessagesState(event.messages, event.username,
           isPrevious: false);
     }
-
     if (event is SendTextMessageEvent) {
       Message message = TextMessage(
-        event.message,
-        DateTime.now().millisecondsSinceEpoch,
-        SharedObjects.prefs.getString(Constants.sessionName),
-        SharedObjects.prefs.getString(Constants.sessionUsername),
-      );
-
+          event.message,
+          DateTime.now().millisecondsSinceEpoch,
+          SharedObjects.prefs.getString(Constants.sessionName),
+          SharedObjects.prefs.getString(Constants.sessionUsername));
       await chatRepository.sendMessage(activeChatId, message);
     }
-
     if (event is SendAttachmentEvent) {
       await mapSendAttachmentEventToState(event);
     }
@@ -102,10 +94,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   Stream<ChatState> mapFetchMessagesEventToState(
       FetchMessagesEvent event) async* {
     try {
-      yield InitialChatState();
-
+      yield FetchingMessageState();
       String chatId =
           await chatRepository.getChatIdByUsername(event.chat.username);
+      //  print('mapFetchMessagesEventToState');
+      //  print('MessSubMap: $messagesSubscriptionMap');
       StreamSubscription messagesSubscription = messagesSubscriptionMap[chatId];
       messagesSubscription?.cancel();
       messagesSubscription = chatRepository.getMessages(chatId).listen(
@@ -136,8 +129,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   Stream<ChatState> mapFetchConversationDetailsEventToState(
       FetchConversationDetailsEvent event) async* {
     User user = await userDataRepository.getUser(event.chat.username);
-    print(user);
     yield FetchedContactDetailsState(user, event.chat.username);
+    dispatch(FetchMessagesEvent(event.chat));
   }
 
   Future mapSendAttachmentEventToState(SendAttachmentEvent event) async {
@@ -147,18 +140,17 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         file, Paths.getAttachmentPathByFileType(event.fileType));
     String username = SharedObjects.prefs.getString(Constants.sessionUsername);
     String name = SharedObjects.prefs.getString(Constants.sessionName);
+    print('File Name: $fileName');
     Message message;
-
     if (event.fileType == FileType.image)
       message = ImageMessage(
           url, fileName, DateTime.now().millisecondsSinceEpoch, name, username);
     else if (event.fileType == FileType.video)
       message = VideoMessage(
-          url, DateTime.now().millisecondsSinceEpoch, name, username);
+          url, fileName, DateTime.now().millisecondsSinceEpoch, name, username);
     else
       message = FileMessage(
           url, fileName, DateTime.now().millisecondsSinceEpoch, name, username);
-
     await chatRepository.sendMessage(event.chatId, message);
   }
 

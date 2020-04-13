@@ -9,16 +9,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SharedObjects {
   static CachedSharedPreferences prefs;
 
-  /**
-   * Supporting only for android for now
+  /*
+  Supporting only for android for now
    */
   static downloadFile(String fileUrl, String fileName) async {
     await FlutterDownloader.enqueue(
       url: fileUrl,
-      savedDir: Constants.downloadsDirPath,
       fileName: fileName,
-      showNotification: true,
-      openFileFromNotification: true,
+      savedDir: Constants.downloadsDirPath,
+      showNotification:
+          true, // show download progress in status bar (for Android)
+      openFileFromNotification:
+          true, // click on notification to open downloaded file (for Android)
     );
   }
 
@@ -31,18 +33,16 @@ class SharedObjects {
       quality: 30,
     );
     final file = File(thumbnail);
-
     return file;
   }
 
   static int getTypeFromFileType(FileType fileType) {
-    if (FileType.image == fileType) {
+    if (fileType == FileType.image)
       return 1;
-    } else if (fileType == FileType.video) {
+    else if (fileType == FileType.video)
       return 2;
-    } else {
+    else
       return 3;
-    }
   }
 }
 
