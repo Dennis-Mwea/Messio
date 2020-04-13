@@ -5,8 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messio/blocs/contacts/Bloc.dart';
 import 'package:messio/config/Assets.dart';
 import 'package:messio/config/Decorations.dart';
-import 'package:messio/config/Palette.dart';
-import 'package:messio/config/Styles.dart';
 import 'package:messio/config/Transitions.dart';
 import 'package:messio/models/Contact.dart';
 import 'package:messio/pages/ConversationPageSlide.dart';
@@ -55,7 +53,7 @@ class _ContactListPageState extends State<ContactListPage>
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Palette.primaryBackgroundColor,
+        backgroundColor: Theme.of(context).primaryColor,
         body: BlocProvider<ContactsBloc>(
             builder: (context) => contactsBloc,
             child: BlocListener<ContactsBloc, ContactsState>(
@@ -64,14 +62,21 @@ class _ContactListPageState extends State<ContactListPage>
                 print(state);
                 if (state is AddContactSuccessState) {
                   Navigator.pop(context);
-                  GradientSnackBar.showMessage(context, "Contact Added Successfully!");
+                  GradientSnackBar.showMessage(
+                      context, "Contact Added Successfully!");
                 } else if (state is ErrorState) {
-                 GradientSnackBar.showError(context, state.exception.errorMessage());
+                  GradientSnackBar.showError(
+                      context, state.exception.errorMessage());
                 } else if (state is AddContactFailedState) {
                   Navigator.pop(context);
-                  GradientSnackBar.showError(context, state.exception.errorMessage());
-                }else if (state is ClickedContactState){
-                  Navigator.push(context,SlideLeftRoute(page: ConversationPageSlide(startContact: state.contact)));
+                  GradientSnackBar.showError(
+                      context, state.exception.errorMessage());
+                } else if (state is ClickedContactState) {
+                  Navigator.push(
+                      context,
+                      SlideLeftRoute(
+                          page: ConversationPageSlide(
+                              startContact: state.contact)));
                 }
               },
               child: Stack(
@@ -80,14 +85,14 @@ class _ContactListPageState extends State<ContactListPage>
                       controller: scrollController,
                       slivers: <Widget>[
                         SliverAppBar(
-                          backgroundColor: Palette.primaryBackgroundColor,
                           expandedHeight: 180.0,
                           pinned: true,
                           elevation: 0,
                           centerTitle: true,
                           flexibleSpace: FlexibleSpaceBar(
                             centerTitle: true,
-                            title: Text("Contacts", style: Styles.appBarTitle),
+                            title: Text("Contacts",
+                                style: Theme.of(context).textTheme.title),
                           ),
                         ),
                         BlocBuilder<ContactsBloc, ContactsState>(
@@ -96,7 +101,8 @@ class _ContactListPageState extends State<ContactListPage>
                             return SliverToBoxAdapter(
                               child: SizedBox(
                                 height: (MediaQuery.of(context).size.height),
-                                child: Center(child: CircularProgressIndicator()),
+                                child:
+                                    Center(child: CircularProgressIndicator()),
                               ),
                             );
                           }
@@ -126,7 +132,10 @@ class _ContactListPageState extends State<ContactListPage>
               ),
             )),
         floatingActionButton: GradientFab(
-          child: Icon(Icons.add),
+          child: Icon(
+            Icons.add,
+            color: Theme.of(context).primaryColor,
+          ),
           animation: animation,
           vsync: this,
           onPressed: () => showAddContactsBottomSheet(context),
@@ -147,74 +156,89 @@ class _ContactListPageState extends State<ContactListPage>
 
   void showAddContactsBottomSheet(parentContext) async {
     await showModalBottomSheetApp(
-        context: context,
-        builder: (BuildContext bc) {
-          return BlocBuilder<ContactsBloc, ContactsState>(
-              builder: (context,state){
-             return Container(
-                color: Color(0xFF737373),
-                // This line set the transparent background
-                child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(40.0),
-                            topRight: Radius.circular(40.0))),
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Padding(
-                              padding: EdgeInsets.only(left: 20, right: 20),
-                              child: Container(constraints: BoxConstraints(minHeight: 100),child: Image.asset(Assets.social))),
-                          Container(
-                            margin: EdgeInsets.only(top: 40),
-                            child: Text(
-                              'Add by Username',
-                              style: Styles.textHeading,
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(50, 20, 50, 20),
-                            child: TextField(
-                              controller: usernameController,
-                              textAlign: TextAlign.center,
-                              style: Styles.subHeading,
-                              decoration: Decorations.getInputDecoration(
-                                  hint: '@username', isPrimary: true),
-                            ),
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              Container(
-                                child: BlocBuilder<ContactsBloc, ContactsState>(
-                                    builder: (context, state) {
-                                  return GradientFab(
-                                    elevation: 0.0,
-                                    child: getButtonChild(state),
-                                    onPressed: () {
-                                      contactsBloc.dispatch(AddContactEvent(
-                                          username: usernameController.text));
-                                    },
-                                  );
-                                }),
-                              ),
-                            ],
-                          )
-                        ],
+      context: context,
+      builder: (BuildContext bc) {
+        return BlocBuilder<ContactsBloc, ContactsState>(
+          builder: (context, state) {
+            return Card(
+              margin: EdgeInsets.all(0.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40.5),
+                  topRight: Radius.circular(40.0),
+                ),
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).backgroundColor,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(40.0),
+                    topRight: Radius.circular(40.0),
+                  ),
+                ),
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Padding(
+                        padding: EdgeInsets.only(left: 20, right: 20),
+                        child: Container(
+                            constraints: BoxConstraints(minHeight: 100),
+                            child: Image.asset(Assets.social))),
+                    Container(
+                      margin: EdgeInsets.only(top: 40),
+                      child: Text(
+                        'Add by Username',
+                        style: Theme.of(context).textTheme.title,
                       ),
-                    )),
-              );
-              });
-        });
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(50, 20, 50, 20),
+                      child: TextField(
+                        controller: usernameController,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.subhead,
+                        decoration: Decorations.getInputDecoration(
+                          hint: '@username',
+                          context: parentContext,
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Container(
+                          child: BlocBuilder<ContactsBloc, ContactsState>(
+                            builder: (context, state) {
+                              return GradientFab(
+                                elevation: 0.0,
+                                child: getButtonChild(state),
+                                onPressed: () {
+                                  contactsBloc.dispatch(
+                                    AddContactEvent(
+                                        username: usernameController.text),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   getButtonChild(ContactsState state) {
     if (state is AddContactSuccessState || state is ErrorState) {
-      return Icon(Icons.check, color: Palette.primaryColor);
+      return Icon(Icons.check, color: Theme.of(context).primaryColor);
     } else if (state is AddContactProgressState) {
       return SizedBox(
         height: 9,
@@ -225,7 +249,7 @@ class _ContactListPageState extends State<ContactListPage>
         ),
       );
     } else {
-      return Icon(Icons.done, color: Palette.primaryColor);
+      return Icon(Icons.done, color: Theme.of(context).primaryColor);
     }
   }
 

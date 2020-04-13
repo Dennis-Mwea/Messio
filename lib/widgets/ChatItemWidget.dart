@@ -1,12 +1,11 @@
-
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:messio/config/Assets.dart';
 import 'package:messio/config/Palette.dart';
-import 'package:intl/intl.dart';
-import 'package:messio/config/Styles.dart';
 import 'package:messio/models/Message.dart';
 import 'package:messio/utils/SharedObjects.dart';
 import 'package:messio/widgets/BottomSheetFixed.dart';
+
 import 'VideoPlayerWidget.dart';
 
 class ChatItemWidget extends StatelessWidget {
@@ -22,11 +21,12 @@ class ChatItemWidget extends StatelessWidget {
     return Container(
         child: Column(children: <Widget>[
       buildMessageContainer(isSelf, message, context),
-      buildTimeStamp(isSelf, message)
+      buildTimeStamp(context, isSelf, message)
     ]));
   }
 
-  Row buildMessageContainer(bool isSelf, Message message, BuildContext context) {
+  Row buildMessageContainer(
+      bool isSelf, Message message, BuildContext context) {
     double lrEdgeInsets = 1.0;
     double tbEdgeInsets = 1.0;
     if (message is TextMessage) {
@@ -36,7 +36,7 @@ class ChatItemWidget extends StatelessWidget {
     return Row(
       children: <Widget>[
         Container(
-          child: buildMessageContent(isSelf, message,context),
+          child: buildMessageContent(isSelf, message, context),
           padding: EdgeInsets.fromLTRB(
               lrEdgeInsets, tbEdgeInsets, lrEdgeInsets, tbEdgeInsets),
           constraints: BoxConstraints(maxWidth: 200.0),
@@ -66,7 +66,9 @@ class ChatItemWidget extends StatelessWidget {
     } else if (message is ImageMessage) {
       return ClipRRect(
           borderRadius: BorderRadius.circular(8.0),
-          child: FadeInImage(placeholder: AssetImage(Assets.placeholder), image: NetworkImage(message.imageUrl)));
+          child: FadeInImage(
+              placeholder: AssetImage(Assets.placeholder),
+              image: NetworkImage(message.imageUrl)));
     } else if (message is VideoMessage) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
@@ -104,18 +106,20 @@ class ChatItemWidget extends StatelessWidget {
             ),
             Container(
               height: 40,
-                child: IconButton(
-                    icon: Icon(
-                      Icons.play_arrow,
-                      color: isSelf
-                          ? Palette.selfMessageColor
-                          : Palette.otherMessageColor,
-                    ),
-                    onPressed: () =>showVideoPlayer(context,message.videoUrl)))
+              child: IconButton(
+                icon: Icon(
+                  Icons.play_arrow,
+                  color: isSelf
+                      ? Palette.selfMessageColor
+                      : Palette.otherMessageColor,
+                ),
+                onPressed: () => showVideoPlayer(context, message.videoUrl),
+              ),
+            ),
           ],
         ),
       );
-    }else if(message is FileMessage){
+    } else if (message is FileMessage) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
         child: Column(
@@ -138,7 +142,7 @@ class ChatItemWidget extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      message.fileName,
+                      message.fileName != null ? message.fileName : 'File',
                       style: TextStyle(
                           fontSize: 14,
                           color: isSelf
@@ -150,22 +154,25 @@ class ChatItemWidget extends StatelessWidget {
               ],
             ),
             Container(
-                height: 40,
-                child: IconButton(
-                    icon: Icon(
-                      Icons.file_download,
-                      color: isSelf
-                          ? Palette.selfMessageColor
-                          : Palette.otherMessageColor,
-                    ),
-                    onPressed: () => SharedObjects.downloadFile(message.fileUrl,message.fileName)))
+              height: 40,
+              child: IconButton(
+                icon: Icon(
+                  Icons.file_download,
+                  color: isSelf
+                      ? Palette.selfMessageColor
+                      : Palette.otherMessageColor,
+                ),
+                onPressed: () => SharedObjects.downloadFile(
+                    message.fileUrl, message.fileName),
+              ),
+            ),
           ],
         ),
       );
     }
   }
 
-  Row buildTimeStamp(bool isSelf, Message message) {
+  Row buildTimeStamp(BuildContext context, bool isSelf, Message message) {
     return Row(
         mainAxisAlignment:
             isSelf ? MainAxisAlignment.end : MainAxisAlignment.start,
@@ -174,7 +181,7 @@ class ChatItemWidget extends StatelessWidget {
             child: Text(
               DateFormat('dd MMM kk:mm').format(
                   DateTime.fromMillisecondsSinceEpoch(message.timeStamp)),
-              style: Styles.date,
+              style: Theme.of(context).textTheme.caption,
             ),
             margin: EdgeInsets.only(
                 left: isSelf ? 5.0 : 0.0,
@@ -185,15 +192,11 @@ class ChatItemWidget extends StatelessWidget {
         ]);
   }
 
-  void showVideoPlayer(parentContext,String videoUrl) async {
+  void showVideoPlayer(parentContext, String videoUrl) async {
     await showModalBottomSheetApp(
         context: parentContext,
         builder: (BuildContext bc) {
-         return VideoPlayerWidget(videoUrl);
+          return VideoPlayerWidget(videoUrl);
         });
   }
-
-
-
-
 }

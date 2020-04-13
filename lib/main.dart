@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messio/blocs/attachments/AttachmentsBloc.dart';
 import 'package:messio/blocs/chats/Bloc.dart';
+import 'package:messio/blocs/config/Bloc.dart';
 import 'package:messio/blocs/contacts/Bloc.dart';
 import 'package:messio/blocs/home/Bloc.dart';
 import 'package:messio/config/Constants.dart';
+import 'package:messio/config/Themes.dart';
 import 'package:messio/pages/HomePage.dart';
 import 'package:messio/repositories/AuthenticationRepository.dart';
 import 'package:messio/repositories/ChatRepository.dart';
@@ -15,7 +17,6 @@ import 'package:messio/utils/SharedObjects.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'blocs/authentication/Bloc.dart';
-import 'config/Palette.dart';
 import 'pages/RegisterPage.dart';
 
 void main() async {
@@ -55,6 +56,9 @@ void main() async {
       ),
       BlocProvider<HomeBloc>(
         builder: (context) => HomeBloc(chatRepository: chatRepository),
+      ),
+      BlocProvider<ConfigBloc>(
+        builder: (context) => ConfigBloc(),
       )
     ],
     child: Messio(),
@@ -62,28 +66,41 @@ void main() async {
 }
 
 class Messio extends StatelessWidget {
+  ThemeData theme;
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Messio',
-      debugShowCheckedModeBanner: false,
-      theme:
-          ThemeData(primaryColor: Palette.primaryColor, fontFamily: 'Manrope'),
-      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (context, state) {
-          // return AttachmentPage();
-          if (state is UnAuthenticated) {
-            return RegisterPage();
-          } else if (state is ProfileUpdated) {
-            //TODO return home here
-            BlocProvider.of<ChatBloc>(context).dispatch(FetchChatListEvent());
-            return HomePage();
-            //  return ConversationPageSlide();
-          } else {
-            return RegisterPage();
-          }
-        },
-      ),
+    return BlocBuilder<ConfigBloc, ConfigState>(
+      builder: (context, state) {
+        if (state is UnConfigState) {
+          theme = SharedObjects.prefs.getBool(Constants.configDarkMode)
+              ? Themes.dark
+              : Themes.light;
+        }
+        if (state is ConfigChangeState &&
+            state.key == Constants.configDarkMode) {
+          theme = state.value ? Themes.dark : Themes.light;
+        }
+
+        return MaterialApp(
+          title: 'Messio',
+          debugShowCheckedModeBanner: false,
+          theme: theme,
+          home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+            builder: (context, state) {
+              if (state is UnAuthenticated) {
+                return RegisterPage();
+              } else if (state is ProfileUpdated) {
+                BlocProvider.of<ChatBloc>(context)
+                    .dispatch(FetchChatListEvent());
+                return HomePage();
+              } else {
+                return RegisterPage();
+              }
+            },
+          ),
+        );
+      },
     );
   }
 }
