@@ -161,4 +161,21 @@ class ChatProvider extends BaseChatProvider {
     });
     return documentReference.documentID;
   }
+
+  @override
+  Future<List<Message>> getAttachments(String chatId, int type) async {
+    DocumentReference chatDocRef =
+        fireStoreDb.collection(Paths.chatsPath).document(chatId);
+    CollectionReference messagesCollection =
+        chatDocRef.collection(Paths.messagesPath);
+    final querySnapshot = await messagesCollection
+        .where('type', isEqualTo: type)
+        .orderBy('timeStamp', descending: true)
+        .getDocuments();
+    List<Message> messageList = List();
+    querySnapshot.documents
+        .forEach((doc) => messageList.add(Message.fromFireStore(doc)));
+
+    return messageList;
+  }
 }

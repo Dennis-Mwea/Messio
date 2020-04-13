@@ -63,24 +63,29 @@ class TextMessage extends Message {
 
 class ImageMessage extends Message {
   String imageUrl;
+  String fileName;
 
-  ImageMessage(this.imageUrl, timeStamp, senderName, senderUsername)
+  ImageMessage(
+      this.imageUrl, this.fileName, timeStamp, senderName, senderUsername)
       : super(timeStamp, senderName, senderUsername);
 
   factory ImageMessage.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data;
-    return ImageMessage(data['imageUrl'], data['timeStamp'], data['senderName'],
-        data['senderUsername']);
+    return ImageMessage(data['imageUrl'], data['fileName'], data['timeStamp'],
+        data['senderName'], data['senderUsername']);
   }
 
   @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = Map();
     map['imageUrl'] = imageUrl;
+    map['fileName'] = fileName;
     map['timeStamp'] = timeStamp;
     map['senderName'] = senderName;
     map['senderUsername'] = senderUsername;
     map['type'] = 1;
+    print('map $map');
+
     return map;
   }
 }
@@ -111,20 +116,23 @@ class VideoMessage extends Message {
 
 class FileMessage extends Message {
   String fileUrl;
+  String fileName;
 
-  FileMessage(this.fileUrl, timeStamp, senderName, senderUsername)
+  FileMessage(
+      this.fileUrl, this.fileName, timeStamp, senderName, senderUsername)
       : super(timeStamp, senderName, senderUsername);
 
   factory FileMessage.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data;
-    return FileMessage(data['fileUrl'], data['timeStamp'], data['senderName'],
-        data['senderUsername']);
+    return FileMessage(data['fileUrl'], data['fileName'], data['timeStamp'],
+        data['senderName'], data['senderUsername']);
   }
 
   @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = Map();
     map['fileUrl'] = fileUrl;
+    map['fileName'] = fileName;
     map['timeStamp'] = timeStamp;
     map['senderName'] = senderName;
     map['senderUsername'] = senderUsername;
