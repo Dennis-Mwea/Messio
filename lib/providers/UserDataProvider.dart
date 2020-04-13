@@ -28,7 +28,7 @@ class UserDataProvider extends BaseUserDataProvider {
       'email': user.email,
       'name': user.displayName,
     };
-    if (!userExists) {
+    if (!userExists && user.photoUrl != null) {
       // if user entry exists then we would not want to override the photo url with the one received from googel auth
       data['photoUrl'] = user.photoUrl;
     }

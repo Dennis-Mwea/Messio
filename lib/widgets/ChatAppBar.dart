@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messio/blocs/chats/Bloc.dart';
@@ -5,6 +8,7 @@ import 'package:messio/config/Assets.dart';
 import 'package:messio/config/Palette.dart';
 import 'package:messio/config/Styles.dart';
 import 'package:messio/models/Chat.dart';
+import 'package:messio/widgets/GradientSnackBar.dart';
 
 class ChatAppBar extends StatefulWidget implements PreferredSizeWidget {
   final double height = 100;
@@ -21,7 +25,10 @@ class ChatAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _ChatAppBarState extends State<ChatAppBar> {
   String _username = "";
   String _name = "";
-  Image _image = Image.asset(Assets.user);
+  Image _image = Image.asset(
+    Assets.user,
+    color: Palette.accentColor,
+  );
   ChatBloc chatBloc;
   Chat chat;
   _ChatAppBarState(this.chat);
@@ -40,7 +47,7 @@ class _ChatAppBarState extends State<ChatAppBar> {
         if (state is FetchedContactDetailsState) {
           print(state.user);
           _name = state.user.name;
-          _username = state.user.username;
+          _username = '@' + state.user.username;
           _image = Image.network(state.user.photoUrl);
         }
 
@@ -80,7 +87,9 @@ class _ChatAppBarState extends State<ChatAppBar> {
                                                   Icons.attach_file,
                                                   color: Palette.secondaryColor,
                                                 ),
-                                                onPressed: () => {}))),
+                                                onPressed: () =>
+                                                    showAttachmentBottomSheet(
+                                                        context)))),
                                     Expanded(
                                         flex: 6,
                                         child: Container(child:
@@ -95,7 +104,7 @@ class _ChatAppBarState extends State<ChatAppBar> {
                                             children: <Widget>[
                                               Text(_name,
                                                   style: Styles.textHeading),
-                                              Text('@$_username',
+                                              Text(_username,
                                                   style: Styles.text)
                                             ],
                                           );
@@ -147,5 +156,40 @@ class _ChatAppBarState extends State<ChatAppBar> {
                         })))),
                   ])))),
     );
+  }
+
+  void showAttachmentBottomSheet(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext buildContext) {
+          return Container(
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(Icons.image),
+                  title: Text('Image'),
+                  onTap: () => showFilePicker(FileType.image),
+                ),
+                ListTile(
+                  leading: Icon(Icons.videocam),
+                  title: Text('Video'),
+                  onTap: () => showFilePicker(FileType.video),
+                ),
+                ListTile(
+                  leading: Icon(Icons.insert_drive_file),
+                  title: Text('File'),
+                  onTap: () => showFilePicker(FileType.any),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  void showFilePicker(FileType fileType) async {
+    File file = await FilePicker.getFile(type: fileType);
+    chatBloc.dispatch(SendAttachmentEvent(chat.chatId, file, fileType));
+    Navigator.pop(context);
+    GradientSnackBar.showMessage(context, 'Sending attachment...');
   }
 }

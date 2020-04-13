@@ -223,9 +223,8 @@ class _RegisterPageState extends State<RegisterPage>
           profileImage = Image.asset(Assets.user).image;
           if (state is PreFillData) {
             age = state.user.age != null ? state.user.age : 18;
-            profileImage = state.user.photoUrl != null
-                ? Image.network(state.user.photoUrl).image
-                : Image.asset(Assets.user).image;
+            if (state.user.photoUrl != null)
+              Image.network(state.user.photoUrl).image;
           } else if (state is ReceivedProfilePicture) {
             profileImageFile = state.file;
             profileImage = Image.file(profileImageFile).image;
