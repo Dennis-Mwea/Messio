@@ -4,7 +4,7 @@ description: Messio is a modern messaging app
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.5.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -27,9 +27,10 @@ dependencies:
   video_player: ^0.10.2+1
   flutter_downloader: ^1.2.2
   downloads_path_provider: ^0.1.0
-  flushbar: 1.6.0
+  flushbar: ^1.10.4
   path_provider: ^1.3.0
-  cached_network_image: ^1.1.1
+  cached_network_image: ^2.0.0-rc
+  sembast: ^2.1.0
 
 dev_dependencies:
   flutter_test:
@@ -63,3 +64,7 @@ flutter:
           weight: 800
         - asset: assets/fonts/manrope-semibold.otf
           weight: 400
+
+analyzer:
+  enable-experiment:
+    - control-flow-collections

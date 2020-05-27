@@ -1,11 +1,13 @@
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:messio/config/Assets.dart';
 import 'package:messio/config/Palette.dart';
+import 'package:intl/intl.dart';
 import 'package:messio/models/Message.dart';
 import 'package:messio/utils/SharedObjects.dart';
 import 'package:messio/widgets/BottomSheetFixed.dart';
-
+import 'package:messio/widgets/ImageFullScreenWidget.dart';
 import 'VideoPlayerWidget.dart';
 
 class ChatItemWidget extends StatelessWidget {
@@ -21,12 +23,11 @@ class ChatItemWidget extends StatelessWidget {
     return Container(
         child: Column(children: <Widget>[
       buildMessageContainer(isSelf, message, context),
-      buildTimeStamp(context, isSelf, message)
+      buildTimeStamp(context,isSelf, message)
     ]));
   }
 
-  Row buildMessageContainer(
-      bool isSelf, Message message, BuildContext context) {
+  Row buildMessageContainer(bool isSelf, Message message, BuildContext context) {
     double lrEdgeInsets = 1.0;
     double tbEdgeInsets = 1.0;
     if (message is TextMessage) {
@@ -36,7 +37,7 @@ class ChatItemWidget extends StatelessWidget {
     return Row(
       children: <Widget>[
         Container(
-          child: buildMessageContent(isSelf, message, context),
+          child: buildMessageContent(isSelf, message,context),
           padding: EdgeInsets.fromLTRB(
               lrEdgeInsets, tbEdgeInsets, lrEdgeInsets, tbEdgeInsets),
           constraints: BoxConstraints(maxWidth: 200.0),
@@ -64,11 +65,15 @@ class ChatItemWidget extends StatelessWidget {
                 isSelf ? Palette.selfMessageColor : Palette.otherMessageColor),
       );
     } else if (message is ImageMessage) {
-      return ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          child: FadeInImage(
-              placeholder: AssetImage(Assets.placeholder),
-              image: NetworkImage(message.imageUrl)));
+      return GestureDetector(
+        onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (_) => ImageFullScreen('ImageMessage_${message.documentId}',message.imageUrl))),
+        child: Hero(
+          tag: 'ImageMessage_${message.documentId}',
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: CachedNetworkImage(imageUrl:message.imageUrl, placeholder: (_,url)=>Image.asset(Assets.placeholder))),
+        ),
+      );
     } else if (message is VideoMessage) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
@@ -106,20 +111,18 @@ class ChatItemWidget extends StatelessWidget {
             ),
             Container(
               height: 40,
-              child: IconButton(
-                icon: Icon(
-                  Icons.play_arrow,
-                  color: isSelf
-                      ? Palette.selfMessageColor
-                      : Palette.otherMessageColor,
-                ),
-                onPressed: () => showVideoPlayer(context, message.videoUrl),
-              ),
-            ),
+                child: IconButton(
+                    icon: Icon(
+                      Icons.play_arrow,
+                      color: isSelf
+                          ? Palette.selfMessageColor
+                          : Palette.otherMessageColor,
+                    ),
+                    onPressed: () =>showVideoPlayer(context,message.videoUrl)))
           ],
         ),
       );
-    } else if (message is FileMessage) {
+    }else if(message is FileMessage){
       return ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
         child: Column(
@@ -142,7 +145,7 @@ class ChatItemWidget extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      message.fileName != null ? message.fileName : 'File',
+                      message.fileName,
                       style: TextStyle(
                           fontSize: 14,
                           color: isSelf
@@ -154,18 +157,15 @@ class ChatItemWidget extends StatelessWidget {
               ],
             ),
             Container(
-              height: 40,
-              child: IconButton(
-                icon: Icon(
-                  Icons.file_download,
-                  color: isSelf
-                      ? Palette.selfMessageColor
-                      : Palette.otherMessageColor,
-                ),
-                onPressed: () => SharedObjects.downloadFile(
-                    message.fileUrl, message.fileName),
-              ),
-            ),
+                height: 40,
+                child: IconButton(
+                    icon: Icon(
+                      Icons.file_download,
+                      color: isSelf
+                          ? Palette.selfMessageColor
+                          : Palette.otherMessageColor,
+                    ),
+                    onPressed: () => SharedObjects.downloadFile(message.fileUrl,message.fileName)))
           ],
         ),
       );
@@ -192,11 +192,15 @@ class ChatItemWidget extends StatelessWidget {
         ]);
   }
 
-  void showVideoPlayer(parentContext, String videoUrl) async {
+  void showVideoPlayer(parentContext,String videoUrl) async {
     await showModalBottomSheetApp(
         context: parentContext,
         builder: (BuildContext bc) {
-          return VideoPlayerWidget(videoUrl);
+         return VideoPlayerWidget(videoUrl);
         });
   }
+
+
+
+
 }

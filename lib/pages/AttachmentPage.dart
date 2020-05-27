@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:messio/blocs/attachments/Bloc.dart';
-import 'package:messio/config/Palette.dart';
 import 'package:messio/models/Message.dart';
 import 'package:messio/models/VideoWrapper.dart';
 import 'package:messio/utils/SharedObjects.dart';
@@ -90,9 +89,6 @@ class _AttachmentPageState extends State<AttachmentPage>
                 SliverToBoxAdapter(
                   child: TabBar(
                     controller: tabController,
-                    indicatorColor: Palette.accentColor,
-                    labelColor: Palette.accentColor,
-                    unselectedLabelColor: Palette.primaryTextColor,
                     tabs: [
                       Tab(icon: Icon(Icons.photo), text: "Photos"),
                       Tab(icon: Icon(Icons.videocam), text: "Videos"),
@@ -220,7 +216,8 @@ class _AttachmentPageState extends State<AttachmentPage>
       onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (_) => ImageFullScreen(index, photos[index].imageUrl))),
+              builder: (_) => ImageFullScreen(
+                  'AttachmentImage_$index', photos[index].imageUrl))),
       child: Hero(
           tag: 'AttachmentImage_$index',
           child: Image.network(photos[index].imageUrl, fit: BoxFit.cover)),
@@ -269,7 +266,6 @@ class _AttachmentPageState extends State<AttachmentPage>
                   IconButton(
                       icon: Icon(
                         Icons.file_download,
-                        color: Palette.otherMessageColor,
                       ),
                       onPressed: () => SharedObjects.downloadFile(
                           fileMessage.fileUrl, fileMessage.fileName))

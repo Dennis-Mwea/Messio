@@ -1,9 +1,10 @@
+
 import 'package:flutter/material.dart';
 
-// Color palette for the app
-class Palette {
+// Color palette for the unthemed pages
+class Palette{
   static Color primaryColor = Colors.white;
-  static Color accentColor = Color(0xff4fc3f7);
+  static Color accentColor =  Color(0xff4fc3f7);
   static Color secondaryColor = Colors.black;
 
   static Color gradientStartColor = accentColor;
@@ -11,10 +12,11 @@ class Palette {
   static Color errorGradientStartColor = Color(0xffd50000);
   static Color errorGradientEndColor = Color(0xff9b0000);
 
-  static Color primaryTextColor = Colors.black;
+
   static Color primaryTextColorLight = Colors.white;
   static Color secondaryTextColorLight = Colors.white70;
   static Color hintTextColorLight = Colors.white70;
+
 
   static Color selfMessageBackgroundColor = Color(0xff4fc3f7);
   static Color otherMessageBackgroundColor = Colors.white;

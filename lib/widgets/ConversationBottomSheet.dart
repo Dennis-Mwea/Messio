@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:messio/widgets/ConversationListWidget.dart';
+
 import 'package:messio/widgets/NavigationPillWidget.dart';
 
 class ConversationBottomSheet extends StatefulWidget {
@@ -11,41 +12,32 @@ class ConversationBottomSheet extends StatefulWidget {
 }
 
 class _ConversationBottomSheetState extends State<ConversationBottomSheet> {
+
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Scaffold(
-        backgroundColor: Theme.of(context).primaryColor,
-        body: ListView(
-          children: <Widget>[
-            GestureDetector(
-              child: ListView(
-                shrinkWrap: true,
-                physics: ClampingScrollPhysics(),
-                children: <Widget>[
-                  NavigationPillWidget(),
-                  Center(
-                    child: Text(
-                      'Messages',
-                      style: Theme.of(context).textTheme.title,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                ],
+    return SafeArea(
+        child: Scaffold(
+            backgroundColor: Theme.of(context).primaryColor,
+            body: ListView(children: <Widget>[
+              GestureDetector(
+                child: ListView(
+                    shrinkWrap: true,
+                    physics: ClampingScrollPhysics(),
+                    children: <Widget>[
+                      NavigationPillWidget(),
+                      Center(
+                          child: Text('Messages', style: Theme.of(context).textTheme.title)),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ]),
+                onVerticalDragEnd: (details) {
+                  if (details.primaryVelocity > 50) {
+                    Navigator.pop(context);
+                  }
+                },
               ),
-              onVerticalDragEnd: (details) {
-                print('Dragged Down');
-                if (details.primaryVelocity > 50) {
-                  Navigator.pop(context);
-                }
-              },
-            ),
-            ConversationListWidget(),
-          ],
-        ),
-      ),
-    );
+              ConversationListWidget(),
+            ])));
   }
 }

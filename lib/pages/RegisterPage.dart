@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:messio/blocs/authentication/Bloc.dart';
 import 'package:messio/config/Assets.dart';
 import 'package:messio/config/Decorations.dart';
 import 'package:messio/config/Palette.dart';
@@ -14,6 +13,7 @@ import 'package:messio/pages/ContactListPage.dart';
 import 'package:messio/widgets/CircleIndicator.dart';
 import 'package:messio/widgets/GradientSnackBar.dart';
 import 'package:messio/widgets/NumberPicker.dart';
+import 'package:messio/blocs/authentication/Bloc.dart';
 
 class RegisterPage extends StatefulWidget {
   RegisterPage();
@@ -39,7 +39,8 @@ class _RegisterPageState extends State<RegisterPage>
   var isKeyboardOpen =
       false; //this variable keeps track of the keyboard, when its shown and when its hidden
 
-  PageController pageController;
+  PageController
+      pageController; // this is the controller of the page. This is used to navigate back and forth between the pages
 
   //Fields related to animation of the gradient
   Alignment begin = Alignment.center;
@@ -54,13 +55,13 @@ class _RegisterPageState extends State<RegisterPage>
 
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
     initApp();
     super.initState();
   }
 
   void initApp() async {
     WidgetsBinding.instance.addObserver(this);
+    pageController = PageController();
     usernameFieldAnimationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
     profilePicHeightAnimation =
@@ -91,7 +92,6 @@ class _RegisterPageState extends State<RegisterPage>
         end = Alignment(1 - pageController.page, 1 - pageController.page);
       });
     });
-
     authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     authenticationBloc.state.listen((state) {
       if (state is Authenticated) {
@@ -393,41 +393,39 @@ class _RegisterPageState extends State<RegisterPage>
 
   buildUpdateProfileButtonWidget() {
     return AnimatedOpacity(
-      opacity: currentPage == 1 ? 1.0 : 0.0,
-      //shows only on page 1
-      duration: Duration(milliseconds: 500),
-      child: Container(
-        margin: EdgeInsets.only(right: 20, bottom: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            FloatingActionButton(
-              onPressed: () => {
-                if ((profileImageFile != null ||
-                        profileImage != placeHolderImage) &&
-                    age != null &&
-                    usernameController.text.isNotEmpty)
-                  {
-                    authenticationBloc.dispatch(SaveProfile(
-                        profileImageFile, age, usernameController.text))
-                  }
-                else
-                  {
-                    GradientSnackBar.showError(
-                        context, 'Please fill all details')
-                  }
-              },
-              elevation: 0,
-              backgroundColor: Palette.primaryColor,
-              child: Icon(
-                Icons.done,
-                color: Theme.of(context).accentColor,
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+        opacity: currentPage == 1 ? 1.0 : 0.0,
+        //shows only on page 1
+        duration: Duration(milliseconds: 500),
+        child: Container(
+            margin: EdgeInsets.only(right: 20, bottom: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                FloatingActionButton(
+                  onPressed: () => {
+                    if ((profileImageFile != null ||
+                            profileImage != placeHolderImage) &&
+                        age != null &&
+                        usernameController.text.isNotEmpty)
+                      {
+                        authenticationBloc.dispatch(SaveProfile(
+                            profileImageFile, age, usernameController.text))
+                      }
+                    else
+                      {
+                        GradientSnackBar.showError(
+                            context, 'Please fill all details')
+                      }
+                  },
+                  elevation: 0,
+                  backgroundColor: Palette.primaryColor,
+                  child: Icon(
+                    Icons.done,
+                    color:Theme.of(context).accentColor,
+                  ),
+                )
+              ],
+            )));
   }
 }

@@ -5,9 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messio/blocs/contacts/Bloc.dart';
 import 'package:messio/config/Assets.dart';
 import 'package:messio/config/Decorations.dart';
-import 'package:messio/config/Transitions.dart';
 import 'package:messio/models/Contact.dart';
-import 'package:messio/pages/ConversationPageSlide.dart';
 import 'package:messio/widgets/BottomSheetFixed.dart';
 import 'package:messio/widgets/ContactRowWidget.dart';
 import 'package:messio/widgets/GradientFab.dart';
@@ -54,29 +52,17 @@ class _ContactListPageState extends State<ContactListPage>
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        body: BlocProvider<ContactsBloc>(
-            builder: (context) => contactsBloc,
-            child: BlocListener<ContactsBloc, ContactsState>(
-              bloc: contactsBloc,
+        body: BlocListener<ContactsBloc, ContactsState>(
               listener: (bc, state) {
                 print(state);
                 if (state is AddContactSuccessState) {
                   Navigator.pop(context);
-                  GradientSnackBar.showMessage(
-                      context, "Contact Added Successfully!");
+                  GradientSnackBar.showMessage(context, "Contact Added Successfully!");
                 } else if (state is ErrorState) {
-                  GradientSnackBar.showError(
-                      context, state.exception.errorMessage());
+                 GradientSnackBar.showError(context, state.exception.errorMessage());
                 } else if (state is AddContactFailedState) {
                   Navigator.pop(context);
-                  GradientSnackBar.showError(
-                      context, state.exception.errorMessage());
-                } else if (state is ClickedContactState) {
-                  Navigator.push(
-                      context,
-                      SlideLeftRoute(
-                          page: ConversationPageSlide(
-                              startContact: state.contact)));
+                  GradientSnackBar.showError(context, state.exception.errorMessage());
                 }
               },
               child: Stack(
@@ -91,8 +77,7 @@ class _ContactListPageState extends State<ContactListPage>
                           centerTitle: true,
                           flexibleSpace: FlexibleSpaceBar(
                             centerTitle: true,
-                            title: Text("Contacts",
-                                style: Theme.of(context).textTheme.title),
+                            title: Text("Contacts", style: Theme.of(context).textTheme.title),
                           ),
                         ),
                         BlocBuilder<ContactsBloc, ContactsState>(
@@ -101,8 +86,7 @@ class _ContactListPageState extends State<ContactListPage>
                             return SliverToBoxAdapter(
                               child: SizedBox(
                                 height: (MediaQuery.of(context).size.height),
-                                child:
-                                    Center(child: CircularProgressIndicator()),
+                                child: Center(child: CircularProgressIndicator()),
                               ),
                             );
                           }
@@ -130,12 +114,9 @@ class _ContactListPageState extends State<ContactListPage>
                   ),
                 ],
               ),
-            )),
+            ),
         floatingActionButton: GradientFab(
-          child: Icon(
-            Icons.add,
-            color: Theme.of(context).primaryColor,
-          ),
+          child: Icon(Icons.add, color: Theme.of(context).primaryColor,),
           animation: animation,
           vsync: this,
           onPressed: () => showAddContactsBottomSheet(context),
@@ -156,84 +137,68 @@ class _ContactListPageState extends State<ContactListPage>
 
   void showAddContactsBottomSheet(parentContext) async {
     await showModalBottomSheetApp(
-      context: context,
-      builder: (BuildContext bc) {
-        return BlocBuilder<ContactsBloc, ContactsState>(
-          builder: (context, state) {
-            return Card(
-              margin: EdgeInsets.all(0.0),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(40.5),
-                  topRight: Radius.circular(40.0),
-                ),
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).backgroundColor,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40.0),
-                    topRight: Radius.circular(40.0),
-                  ),
-                ),
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Padding(
-                        padding: EdgeInsets.only(left: 20, right: 20),
-                        child: Container(
-                            constraints: BoxConstraints(minHeight: 100),
-                            child: Image.asset(Assets.social))),
-                    Container(
-                      margin: EdgeInsets.only(top: 40),
-                      child: Text(
-                        'Add by Username',
-                        style: Theme.of(context).textTheme.title,
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(50, 20, 50, 20),
-                      child: TextField(
-                        controller: usernameController,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.subhead,
-                        decoration: Decorations.getInputDecoration(
-                          hint: '@username',
-                          context: parentContext,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Container(
-                          child: BlocBuilder<ContactsBloc, ContactsState>(
-                            builder: (context, state) {
-                              return GradientFab(
-                                elevation: 0.0,
-                                child: getButtonChild(state),
-                                onPressed: () {
-                                  contactsBloc.dispatch(
-                                    AddContactEvent(
-                                        username: usernameController.text),
-                                  );
-                                },
-                              );
-                            },
+        context: context,
+        builder: (BuildContext bc) {
+          return BlocBuilder<ContactsBloc, ContactsState>(
+              builder: (context,state){
+             return  Card(
+               margin: EdgeInsets.all(0),
+                    shape: RoundedRectangleBorder(borderRadius: new BorderRadius.only(topLeft: Radius.circular(40.5),topRight:Radius.circular(40.0))),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color:Theme.of(context).backgroundColor,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(40.0),
+                              topRight: Radius.circular(40.0))),
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Padding(
+                              padding: EdgeInsets.only(left: 20, right: 20),
+                              child: Container(constraints: BoxConstraints(minHeight: 100),child: Image.asset(Assets.social))),
+                          Container(
+                            margin: EdgeInsets.only(top: 40),
+                            child: Text(
+                              'Add by Username',
+                              style: Theme.of(context).textTheme.title,
+                            ),
                           ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
+                          Container(
+                            margin: EdgeInsets.fromLTRB(50, 20, 50, 20),
+                            child: TextField(
+                              controller: usernameController,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.subhead,
+                              decoration: Decorations.getInputDecoration(
+                                  hint: '@username', context: parentContext),
+                            ),
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Container(
+                                child: BlocBuilder<ContactsBloc, ContactsState>(
+                                    builder: (context, state) {
+                                  return GradientFab(
+                                    elevation: 0.0,
+                                    child: getButtonChild(state),
+                                    onPressed: () {
+                                      contactsBloc.dispatch(AddContactEvent(
+                                          username: usernameController.text));
+                                    },
+                                  );
+                                }),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+              );
+              });
+        });
   }
 
   getButtonChild(ContactsState state) {
@@ -245,7 +210,7 @@ class _ContactListPageState extends State<ContactListPage>
         width: 9,
         child: CircularProgressIndicator(
           value: null,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
         ),
       );
     } else {
